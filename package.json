@@ -1,0 +1,58 @@
+{
+  "name": "@zeroindex-ai/eval-pack",
+  "version": "0.1.0",
+  "description": "Opinionated open-source eval harness for RAG and agent apps built on Claude",
+  "type": "module",
+  "main": "dist/core/index.js",
+  "types": "dist/core/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/core/index.js",
+      "types": "./dist/core/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeroindex-ai/eval-pack.git"
+  },
+  "homepage": "https://github.com/zeroindex-ai/eval-pack#readme",
+  "bugs": {
+    "url": "https://github.com/zeroindex-ai/eval-pack/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "evals",
+    "llm-as-judge",
+    "rag",
+    "agent",
+    "claude",
+    "anthropic",
+    "testing",
+    "ai"
+  ],
+  "packageManager": "pnpm@10.0.0"
+}

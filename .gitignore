@@ -1,0 +1,15 @@
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+.DS_Store
+.env*
+!.env.example
+*.pem
+*.key
+
+# local scratchpad — not for public consumption
+NOTES.md
+
+# Claude Code per-user local settings (machine paths, permission rules) — never commit
+.claude/settings.local.json
