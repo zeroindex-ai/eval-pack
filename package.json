@@ -9,6 +9,10 @@
     ".": {
       "import": "./dist/core/index.js",
       "types": "./dist/core/index.d.ts"
+    },
+    "./checks": {
+      "import": "./dist/core/checks.js",
+      "types": "./dist/core/checks.d.ts"
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
