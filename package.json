@@ -1,6 +1,6 @@
 {
   "name": "@zeroindex-ai/eval-pack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Opinionated open-source eval harness for RAG and agent apps built on Claude",
   "type": "module",
   "main": "dist/core/index.js",
@@ -10,20 +10,24 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/core/index.d.ts",
       "import": "./dist/core/index.js",
-      "types": "./dist/core/index.d.ts"
+      "default": "./dist/core/index.js"
     },
     "./checks": {
+      "types": "./dist/core/checks.d.ts",
       "import": "./dist/core/checks.js",
-      "types": "./dist/core/checks.d.ts"
+      "default": "./dist/core/checks.js"
     },
     "./judge-claude": {
+      "types": "./dist/judge-claude/index.d.ts",
       "import": "./dist/judge-claude/index.js",
-      "types": "./dist/judge-claude/index.d.ts"
+      "default": "./dist/judge-claude/index.js"
     },
     "./report-html": {
+      "types": "./dist/report-html/index.d.ts",
       "import": "./dist/report-html/index.js",
-      "types": "./dist/report-html/index.d.ts"
+      "default": "./dist/report-html/index.js"
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
