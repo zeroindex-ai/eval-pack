@@ -5,6 +5,9 @@
   "type": "module",
   "main": "dist/core/index.js",
   "types": "dist/core/index.d.ts",
+  "bin": {
+    "eval-pack": "dist/cli/bin.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/core/index.js",
@@ -25,7 +28,7 @@
   },
   "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/cli/bin.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
