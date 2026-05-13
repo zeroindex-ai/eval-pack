@@ -17,6 +17,10 @@
     "./judge-claude": {
       "import": "./dist/judge-claude/index.js",
       "types": "./dist/judge-claude/index.d.ts"
+    },
+    "./report-html": {
+      "import": "./dist/report-html/index.js",
+      "types": "./dist/report-html/index.d.ts"
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
