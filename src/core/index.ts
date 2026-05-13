@@ -1,6 +1,6 @@
 // Barrel for @zeroindex-ai/eval-pack core.
-// Public API surface grows as work-list items 5–7 land
-// (citations, passRule, runner).
+// Public API surface grows as work-list items 6–7 land
+// (passRule, runner).
 
 export { recallAtK, percentile, p50, p95 } from './metrics.js';
 
@@ -31,3 +31,5 @@ export {
   type CitationCountOpts,
   type ExpectRefusalOpts,
 } from './checks.js';
+
+export { markerCitationExtractor, noopCitationExtractor } from './citations.js';
