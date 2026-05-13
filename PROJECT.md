@@ -467,23 +467,25 @@ Mechanically, `evals.zeroindex.ai` is a new public repo `zeroindex-ai/evals-site
 
 Not broken into sprints by design; sequence reflects dependency, not calendar.
 
-1. **Scaffold the repo.** `pnpm init` private; `pnpm-workspace.yaml` reserved for future even though v0.1 is single-package; `tsconfig.json`, ESLint, Vitest, CI workflow; empty `src/` tree matching the layout in §8; MIT `LICENSE`; placeholder `README.md`.
-2. **Lift `metrics.ts` and `metrics.test.ts`** from `ask-zeroindex/evals/` verbatim into `src/core/`. Green vitest run is the first commit signal.
-3. **Define contracts in `src/core/schema.ts`** — every type from §4, Zod schemas for `GoldenSet` and `Judgment` JSON, exported types.
-4. **Implement the 4 built-in checks** in `src/core/checks.ts` with vitest tests against fabricated `Result` shapes. No LLM calls in any test.
-5. **Implement `src/core/citations.ts`** — `markerCitationExtractor(regex)` and `noopCitationExtractor`. Unit-tested.
-6. **Implement `src/core/passRule.ts`** — default rule + a small helper for users to compose category-conditional rules.
-7. **Implement `src/core/runner.ts`** — the orchestration loop. Throttling, per-item error capture, summary aggregation, results JSON write. Unit-test with a fake subject and a fake judge; assert pass-rate math and per-item error isolation.
-8. **Ship `src/judge-claude/`** — port the existing `judgeAnswer` prompt unchanged for fidelity. Add a Zod-validated JSON parser. Wire `model` and `system` as factory options.
-9. **Ship `src/report-html/`** — accept `Result[]` + run metadata, return a string. Snapshot test on a fixture.
-10. **Ship `src/cli/`** — flag parsing, dynamic import of user's subject file via `tsx` runtime, compose stdout + JSON + HTML printers, exit-code logic, threshold gate.
-11. **Port `ask-zeroindex/evals/`** to consume `eval-pack`. Migrate `golden-seed.json` schema. Replace inlined `run.ts` with a thin `evals/subject.ts` + `evals/eval.config.ts`. Run targeting ≥90% pass rate. Delete the inlined harness.
-12. **Add `examples/dummy-agent/`** — 4–5 golden items, a static-lookup subject, no LLM judge. Proves the harness works for a non-RAG case.
-13. **Ship `action/`** — composite action YAML + `entrypoint.sh`. First consumer: `ask-zeroindex/.github/workflows/eval.yml` shrinks to ~10 lines.
-14. **Publish v0.1.0 to npm.** Configure `exports` map, `bin`, `files`. Tag the monorepo `v0.1.0` and a moving `v1` tag for the action. CI gates publish on green typecheck + lint + tests.
-15. **Stand up `zeroindex-ai/evals-site`** as a Cloudflare Workers Static Assets site. CI in `ask-zeroindex` commits the HTML report on each successful eval.
-16. **Update `zeroindex.ai`** — add the Stack pill, add the Principle 02 link. Update `STYLE_GUIDE.md` only if the link pattern is new.
-17. **Top-level README + per-area docs.** Value-prop, install snippet, minimal usage, link to `evals.zeroindex.ai` as the live proof.
+**Status as of 2026-05-13:** items 1–14 and 17 shipped. v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfooded the package end-to-end at 90% pass rate (matching the documented baseline). Outstanding: items 15 (stand up `evals.zeroindex.ai`) and 16 (Stack pill + Principle 02 link on the marketing site).
+
+1. ✅ **Scaffold the repo.** `pnpm init` private; `pnpm-workspace.yaml` reserved for future even though v0.1 is single-package; `tsconfig.json`, ESLint, Vitest, CI workflow; empty `src/` tree matching the layout in §8; MIT `LICENSE`; placeholder `README.md`.
+2. ✅ **Lift `metrics.ts` and `metrics.test.ts`** from `ask-zeroindex/evals/` verbatim into `src/core/`. Green vitest run is the first commit signal.
+3. ✅ **Define contracts in `src/core/schema.ts`** — every type from §4, Zod schemas for `GoldenSet` and `Judgment` JSON, exported types.
+4. ✅ **Implement the 4 built-in checks** in `src/core/checks.ts` with vitest tests against fabricated `Result` shapes. No LLM calls in any test.
+5. ✅ **Implement `src/core/citations.ts`** — `markerCitationExtractor(regex)` and `noopCitationExtractor`. Unit-tested.
+6. ✅ **Implement `src/core/passRule.ts`** — default rule + a small helper for users to compose category-conditional rules.
+7. ✅ **Implement `src/core/runner.ts`** — the orchestration loop. Throttling, per-item error capture, summary aggregation, results JSON write. Unit-test with a fake subject and a fake judge; assert pass-rate math and per-item error isolation.
+8. ✅ **Ship `src/judge-claude/`** — port the existing `judgeAnswer` prompt unchanged for fidelity. Add a Zod-validated JSON parser. Wire `model` and `system` as factory options.
+9. ✅ **Ship `src/report-html/`** — accept `Result[]` + run metadata, return a string. Snapshot test on a fixture.
+10. ✅ **Ship `src/cli/`** — flag parsing, dynamic import of user's subject file via `tsx` runtime, compose stdout + JSON + HTML printers, exit-code logic, threshold gate.
+11. ✅ **Port `ask-zeroindex/evals/`** to consume `eval-pack`. Migrate `golden-seed.json` schema. Replace inlined `run.ts` with a thin `evals/subject.ts` + `evals/eval.config.ts`. Run targeting ≥90% pass rate. Delete the inlined harness.
+12. ✅ **Add `examples/dummy-agent/`** — 4–5 golden items, a static-lookup subject, no LLM judge. Proves the harness works for a non-RAG case.
+13. ✅ **Ship `action/`** — composite action YAML + `entrypoint.sh`. First consumer: `ask-zeroindex/.github/workflows/eval.yml` shrinks to ~10 lines.
+14. ✅ **Publish v0.1.0 to npm.** Shipped 0.1.0 and 0.1.1 (the 0.1.1 patch added `default` to subpath exports — caught by the ask-zeroindex dogfood when tsx couldn't resolve the package). Configure `exports` map, `bin`, `files`. Tag the monorepo `v0.1.0` and a moving `v1` tag for the action. CI gates publish on green typecheck + lint + tests.
+15. ⏳ **Stand up `zeroindex-ai/evals-site`** as a Cloudflare Workers Static Assets site. CI in `ask-zeroindex` commits the HTML report on each successful eval.
+16. ⏳ **Update `zeroindex.ai`** — add the Stack pill, add the Principle 02 link. Update `STYLE_GUIDE.md` only if the link pattern is new.
+17. ✅ **Top-level README + per-area docs.** Value-prop, install snippet, minimal usage, link to `evals.zeroindex.ai` as the live proof.
 
 ---
 
