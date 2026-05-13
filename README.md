@@ -143,6 +143,42 @@ Exit codes: `0` pass, `1` below threshold, `2` usage error, `3` every item error
 
 TypeScript subject files require invoking the CLI via `pnpm tsx eval-pack run ...` or pre-compiling to JS. Bundling `tsx` is a v0.2 candidate.
 
+## GitHub composite action
+
+Drop one `uses:` into your workflow instead of stitching pnpm + Node + the CLI invocation yourself:
+
+```yaml
+# .github/workflows/eval.yml
+name: Eval
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: zeroindex-ai/eval-pack/action@v1
+        with:
+          golden: evals/golden.json
+          subject: ./evals/subject.ts
+          threshold: "0.8"
+          html-out: evals/results/latest.html
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # plus whatever env your subject's pipeline needs
+```
+
+The action sets up pnpm + Node, runs `pnpm install --frozen-lockfile`, invokes the CLI via `tsx` (so TS subjects work), and uploads the JSON + HTML report as workflow artifacts (always — even on failure). Inputs mirror the CLI flags; `tsx` and `@zeroindex-ai/eval-pack` must be devDependencies in your `package.json`.
+
+Full action reference: [`action/action.yml`](./action/action.yml).
+
 ## HTML report
 
 `renderHtml(report, opts)` returns a single self-contained HTML string — no client JS, no external assets. Safe to view via `file://`, embed via iframe, or ship as a CI artifact.

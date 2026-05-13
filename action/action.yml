@@ -1,0 +1,101 @@
+name: Run @zeroindex-ai/eval-pack
+description: Run an eval-pack golden-set evaluation against your subject + judge and upload the JSON + HTML report as workflow artifacts.
+author: ZeroIndex LLC
+
+inputs:
+  golden:
+    description: Path to the golden-set JSON file
+    required: false
+    default: evals/golden.json
+  subject:
+    description: Path to a JS or TS file exporting a `subject` function (default export or named `subject`)
+    required: true
+  judge:
+    description: Judge backend — "claude" or "none"
+    required: false
+    default: claude
+  judge-model:
+    description: Override the judge model id (when --judge=claude)
+    required: false
+    default: claude-sonnet-4-6
+  threshold:
+    description: Pass-rate threshold in [0,1]. When the run falls below, the action fails. Omit to skip gating.
+    required: false
+    default: ""
+  filter:
+    description: 'Filter spec, e.g. "category=positive". Pass multiple via newlines.'
+    required: false
+    default: ""
+  limit:
+    description: Maximum number of items to run
+    required: false
+    default: ""
+  throttle-ms:
+    description: Sleep between items in ms (vendor rate-limit hedging)
+    required: false
+    default: ""
+  results-dir:
+    description: Where to write the run-<timestamp>.json
+    required: false
+    default: evals/results
+  html-out:
+    description: Path to write the standalone HTML report. Omit to skip.
+    required: false
+    default: ""
+  node-version:
+    description: Node.js version to install
+    required: false
+    default: "24"
+  install:
+    description: 'Run `pnpm install --frozen-lockfile` first. Set to "false" to assume deps are already installed.'
+    required: false
+    default: "true"
+  upload-artifacts:
+    description: Upload results-dir and html-out as workflow artifacts (always, even on failure)
+    required: false
+    default: "true"
+  artifact-name:
+    description: Workflow-artifact name for the uploaded results
+    required: false
+    default: eval-pack-results
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - name: Install dependencies
+      if: inputs.install == 'true'
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Run eval-pack
+      shell: bash
+      env:
+        EVAL_PACK_GOLDEN: ${{ inputs.golden }}
+        EVAL_PACK_SUBJECT: ${{ inputs.subject }}
+        EVAL_PACK_JUDGE: ${{ inputs.judge }}
+        EVAL_PACK_JUDGE_MODEL: ${{ inputs.judge-model }}
+        EVAL_PACK_THRESHOLD: ${{ inputs.threshold }}
+        EVAL_PACK_FILTER: ${{ inputs.filter }}
+        EVAL_PACK_LIMIT: ${{ inputs.limit }}
+        EVAL_PACK_THROTTLE_MS: ${{ inputs.throttle-ms }}
+        EVAL_PACK_RESULTS_DIR: ${{ inputs.results-dir }}
+        EVAL_PACK_HTML_OUT: ${{ inputs.html-out }}
+      run: bash ${{ github.action_path }}/entrypoint.sh
+
+    - name: Upload eval results
+      if: always() && inputs.upload-artifacts == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: |
+          ${{ inputs.results-dir }}
+          ${{ inputs.html-out }}
+        if-no-files-found: warn
+        retention-days: 30
