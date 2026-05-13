@@ -13,6 +13,10 @@
     "./checks": {
       "import": "./dist/core/checks.js",
       "types": "./dist/core/checks.d.ts"
+    },
+    "./judge-claude": {
+      "import": "./dist/judge-claude/index.js",
+      "types": "./dist/judge-claude/index.d.ts"
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
@@ -24,6 +28,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.95.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
