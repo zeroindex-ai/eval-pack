@@ -1,10 +1,10 @@
 // Eval metrics: recall@K for retrieval ablation and percentile (p50/p95)
 // for latency aggregation. Pure functions, no dependencies.
 
-export function recallAtK(retrievedIds: number[], relevantIds: number[]): number {
-  if (relevantIds.length === 0) return 1;
-  const set = new Set(retrievedIds);
-  return relevantIds.filter((id) => set.has(id)).length / relevantIds.length;
+export function recallAtK<T>(retrieved: readonly T[], relevant: readonly T[]): number {
+  if (relevant.length === 0) return 1;
+  const set = new Set<T>(retrieved);
+  return relevant.filter((id) => set.has(id)).length / relevant.length;
 }
 
 // Index-based percentile (no interpolation) — fine for 10–30 sample sizes.
