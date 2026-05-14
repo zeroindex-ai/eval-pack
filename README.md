@@ -213,7 +213,7 @@ CI runs the same gates across Node 20, 22, and 24 on every PR and push to `main`
 ## Status & roadmap
 
 - ✅ **v0.1** — core, Claude judge, HTML report, CLI
-- ⏳ **v0.1.x** — `ask-zeroindex` reference port, GitHub composite action, dummy-agent example, `evals.zeroindex.ai` published reports
+- ✅ **v0.1.x** — `ask-zeroindex` reference port, GitHub composite action, dummy-agent example, `evals.zeroindex.ai` published reports
 - 🔭 **v0.2 candidates** — OpenAI / Gemini judges (adapter pattern), agent-specific primitives (tool-call assertions, trajectory grading), run-over-run diffing + regression detection
 
 Full design + decision log + ordered work list: **[PROJECT.md](./PROJECT.md)**.

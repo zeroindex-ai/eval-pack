@@ -38,11 +38,11 @@ The eval methodology that powers `ask-zeroindex` (LLM-as-judge + programmatic ch
 
 | Goal | Metric | Status |
 |---|---|---|
-| `ask-zeroindex` consumes `eval-pack` instead of inlined harness | The 30-query seed run reproduces the documented 90% pass rate from `eval-baselines.md` | ⏳ Pending |
-| Second consumer proves the contract isn't RAG-shaped | `examples/dummy-agent` runs eval-pack against a non-RAG subject with a tiny golden set | ⏳ Pending |
-| Public HTML report | `evals.zeroindex.ai/ask-zeroindex/latest.html` reachable from `zeroindex.ai` Principle 02 | ⏳ Pending |
-| Reusable GitHub composite action | Consumer workflow drops from ~35 lines to ~10 | ⏳ Pending |
-| Published to npm | `@zeroindex-ai/eval-pack` v0.1.0 public on npmjs.com | ⏳ Pending |
+| `ask-zeroindex` consumes `eval-pack` instead of inlined harness | The 30-query seed run reproduces the documented 90% pass rate from `eval-baselines.md` | ✅ |
+| Second consumer proves the contract isn't RAG-shaped | `examples/dummy-agent` runs eval-pack against a non-RAG subject with a tiny golden set | ✅ |
+| Public HTML report | `evals.zeroindex.ai/ask-zeroindex/latest` live | ✅ |
+| Reusable GitHub composite action | Consumer workflow drops from ~35 lines to ~10 | ✅ |
+| Published to npm | `@zeroindex-ai/eval-pack` v0.1.0 public on npmjs.com | ✅ |
 
 ### Out of scope (for v0.1)
 
@@ -451,8 +451,6 @@ eval-pack/
 ---
 
 ## 9. Ordered work list
-
-Not broken into sprints by design; sequence reflects dependency, not calendar.
 
 **Status as of 2026-05-14:** v0.1 work-list complete. All 17 items shipped — v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfoods the package end-to-end (90% pass-rate baseline, 97% on the latest scheduled run); `evals.zeroindex.ai` live serving HTML reports.
 
