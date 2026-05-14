@@ -467,7 +467,7 @@ Mechanically, `evals.zeroindex.ai` is a new public repo `zeroindex-ai/evals-site
 
 Not broken into sprints by design; sequence reflects dependency, not calendar.
 
-**Status as of 2026-05-13:** items 1–14 and 17 shipped. v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfooded the package end-to-end at 90% pass rate (matching the documented baseline). Outstanding: items 15 (stand up `evals.zeroindex.ai`) and 16 (Stack pill + Principle 02 link on the marketing site).
+**Status as of 2026-05-14:** v0.1 work-list complete. All 17 items shipped. v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfooded the package end-to-end (90% pass rate baseline, 97% on the latest scheduled run); `evals.zeroindex.ai` live serving HTML reports; `zeroindex.ai` Stack pill + Principle 02 link land alongside.
 
 1. ✅ **Scaffold the repo.** `pnpm init` private; `pnpm-workspace.yaml` reserved for future even though v0.1 is single-package; `tsconfig.json`, ESLint, Vitest, CI workflow; empty `src/` tree matching the layout in §8; MIT `LICENSE`; placeholder `README.md`.
 2. ✅ **Lift `metrics.ts` and `metrics.test.ts`** from `ask-zeroindex/evals/` verbatim into `src/core/`. Green vitest run is the first commit signal.
@@ -483,8 +483,8 @@ Not broken into sprints by design; sequence reflects dependency, not calendar.
 12. ✅ **Add `examples/dummy-agent/`** — 4–5 golden items, a static-lookup subject, no LLM judge. Proves the harness works for a non-RAG case.
 13. ✅ **Ship `action/`** — composite action YAML + `entrypoint.sh`. First consumer: `ask-zeroindex/.github/workflows/eval.yml` shrinks to ~10 lines.
 14. ✅ **Publish v0.1.0 to npm.** Shipped 0.1.0 and 0.1.1 (the 0.1.1 patch added `default` to subpath exports — caught by the ask-zeroindex dogfood when tsx couldn't resolve the package). Configure `exports` map, `bin`, `files`. Tag the monorepo `v0.1.0` and a moving `v1` tag for the action. CI gates publish on green typecheck + lint + tests.
-15. ⏳ **Stand up `zeroindex-ai/evals-site`** as a Cloudflare Workers Static Assets site. CI in `ask-zeroindex` commits the HTML report on each successful eval.
-16. ⏳ **Update `zeroindex.ai`** — add the Stack pill, add the Principle 02 link. Update `STYLE_GUIDE.md` only if the link pattern is new.
+15. ✅ **Stand up `zeroindex-ai/evals-site`** as a Cloudflare Workers Static Assets site. CI in `ask-zeroindex` commits the HTML report on each successful eval.
+16. ✅ **Update `zeroindex.ai`** — add the Stack pill, add the Principle 02 link. Update `STYLE_GUIDE.md` only if the link pattern is new.
 17. ✅ **Top-level README + per-area docs.** Value-prop, install snippet, minimal usage, link to `evals.zeroindex.ai` as the live proof.
 
 ---
