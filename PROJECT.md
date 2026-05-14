@@ -469,7 +469,7 @@ eval-pack/
 13. ✅ **Ship `action/`** — composite action YAML + `entrypoint.sh`. First consumer: `ask-zeroindex/.github/workflows/eval.yml` shrinks to ~10 lines.
 14. ✅ **Publish v0.1.0 to npm.** Shipped 0.1.0 and 0.1.1 (the 0.1.1 patch added `default` to subpath exports — caught by the ask-zeroindex dogfood when tsx couldn't resolve the package). Configure `exports` map, `bin`, `files`. Tag the monorepo `v0.1.0` and a moving `v1` tag for the action. CI gates publish on green typecheck + lint + tests.
 15. ✅ **Stand up `zeroindex-ai/evals-site`** as a Cloudflare Workers Static Assets site. CI in `ask-zeroindex` commits the HTML report on each successful eval.
-16. ✅ **Update `zeroindex.ai`** — add the Stack pill, add the Principle 02 link. Update `STYLE_GUIDE.md` only if the link pattern is new.
+16. ✅ **Link eval-pack from the ZeroIndex website** — stack-list pill + a link to the live reports.
 17. ✅ **Top-level README + per-area docs.** Value-prop, install snippet, minimal usage, link to `evals.zeroindex.ai` as the live proof.
 
 ---
