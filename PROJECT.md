@@ -1,16 +1,12 @@
 # eval-pack — Project Documentation
 
-> Last updated: 2026-05-12 (pre-implementation)
-> Author: Abhishek Bhandari, with iterative collaboration via Claude Code
->
-> **Status: Plan only.** Repo not scaffolded yet. This file captures the full design before any code lands so the first commit can be mechanical.
+> **Status: shipped** — `@zeroindex-ai/eval-pack` v0.1.1 on npm. Core + Claude judge + HTML report + CLI + composite GitHub action, dogfooded end-to-end by `ask-zeroindex`.
 
 This document captures the scope, strategic decisions, architecture, public API contracts, distribution shape, and ordered work list for `eval-pack`. It exists to:
 
 1. Onboard future collaborators (or future-you, in a clean session)
 2. Capture the **reasoning** behind decisions, not just the decisions themselves
 3. Document the engineering decisions and tradeoffs as a durable complement to the code
-4. Be the source of truth that the first commit (scaffold + lifted `metrics.ts`) is validated against
 
 ---
 
