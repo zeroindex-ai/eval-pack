@@ -9,7 +9,7 @@ This document captures the scope, strategic decisions, architecture, public API 
 
 1. Onboard future collaborators (or future-you, in a clean session)
 2. Capture the **reasoning** behind decisions, not just the decisions themselves
-3. Serve as a portfolio artifact — the kind of decision-doc engineering managers expect to read alongside the code
+3. Document the engineering decisions and tradeoffs as a durable complement to the code
 4. Be the source of truth that the first commit (scaffold + lifted `metrics.ts`) is validated against
 
 ---
@@ -30,10 +30,9 @@ The package gives an AI-application author three things they'd otherwise build t
 
 The eval methodology that powers `ask-zeroindex` (LLM-as-judge + programmatic checks + threshold-gated CI) is the kind of thing every Claude-based application needs but few teams have packaged in a small, opinionated, dependency-light way. The discipline already runs inside `ask-zeroindex/evals/`; extracting it as a public npm package makes it usable everywhere else.
 
-- **Backs an existing public claim.** Principle `02 / Truth` on zeroindex.ai promises "real evals." Today the only evidence is buried under `ask-zeroindex/evals/`. Extracting it as a reusable, public, npm-installable artifact makes the claim verifiable from a single link.
-- **Highest ROI per hour.** The core code already exists in `ask-zeroindex/evals/`. The work is generalization + packaging + distribution discipline, not greenfield design.
-- **Compounds across future ZeroIndex projects.** Any subsequent Claude-based application can adopt the same eval harness on day one and ship with measurable quality numbers.
-- **A second axis of "ZeroIndex ships small composable packages."** `mcp-pack` already proves this for vendor integrations. `eval-pack` proves it for AI-engineering primitives.
+- **Lifted from production, not greenfield.** The core logic already exists and is battle-tested inside `ask-zeroindex/evals/`. The work here is generalization, packaging, and distribution discipline.
+- **Reusable across any Claude app.** Anything shaped `(question) => Promise<AnswerResult>` is a valid subject — RAG pipelines, agents, plain chat. The harness never imports the caller's stack.
+- **Small surface, no platform.** One package, subpath exports, a CLI, a composite action. No service to host, no proprietary format, no lock-in.
 
 ### Goals & success criteria for v0.1
 
@@ -451,23 +450,11 @@ eval-pack/
 
 ---
 
-## 9. Site placement on zeroindex.ai
-
-| Surface | Change |
-|---|---|
-| Principle `02 / Truth` card | Add small link below the body: *"See live evals →"* pointing to `evals.zeroindex.ai`. |
-| Stack section, "DevOps & Tooling" row | Add pill `eval-pack` linked to `github.com/zeroindex-ai/eval-pack`. |
-| New subdomain `evals.zeroindex.ai` | Cloudflare proxied; serves static HTML reports per project. First content: `/ask-zeroindex/latest.html`. |
-
-Mechanically, `evals.zeroindex.ai` is a new public repo `zeroindex-ai/evals-site` with the same Cloudflare Workers Static Assets pipeline as `zeroindexai/`. Each project's CI commits its HTML report there on every successful main-branch eval. No app code, no API surface.
-
----
-
-## 10. Ordered work list
+## 9. Ordered work list
 
 Not broken into sprints by design; sequence reflects dependency, not calendar.
 
-**Status as of 2026-05-14:** v0.1 work-list complete. All 17 items shipped. v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfooded the package end-to-end (90% pass rate baseline, 97% on the latest scheduled run); `evals.zeroindex.ai` live serving HTML reports; `zeroindex.ai` Stack pill + Principle 02 link land alongside.
+**Status as of 2026-05-14:** v0.1 work-list complete. All 17 items shipped — v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfoods the package end-to-end (90% pass-rate baseline, 97% on the latest scheduled run); `evals.zeroindex.ai` live serving HTML reports.
 
 1. ✅ **Scaffold the repo.** `pnpm init` private; `pnpm-workspace.yaml` reserved for future even though v0.1 is single-package; `tsconfig.json`, ESLint, Vitest, CI workflow; empty `src/` tree matching the layout in §8; MIT `LICENSE`; placeholder `README.md`.
 2. ✅ **Lift `metrics.ts` and `metrics.test.ts`** from `ask-zeroindex/evals/` verbatim into `src/core/`. Green vitest run is the first commit signal.
@@ -489,7 +476,7 @@ Not broken into sprints by design; sequence reflects dependency, not calendar.
 
 ---
 
-## 11. Operational runbook
+## 10. Operational runbook
 
 ### Local development
 
@@ -531,7 +518,7 @@ pnpm exec eval-pack run \
 
 ---
 
-## 12. Decision log (running)
+## 11. Decision log (running)
 
 | Date | Decision | Why |
 |---|---|---|
@@ -546,7 +533,7 @@ pnpm exec eval-pack run \
 
 ---
 
-## 13. Known constraints & future work
+## 12. Known constraints & future work
 
 ### v0.1 known constraints
 
@@ -573,7 +560,7 @@ pnpm exec eval-pack run \
 
 ---
 
-## 14. Cross-references
+## 13. Cross-references
 
 - **Source of the lift-and-shift code:** [`zeroindex-ai/ask-zeroindex/evals/`](https://github.com/zeroindex-ai/ask-zeroindex/tree/main/evals)
 - **Source of the methodology writeup:** [`zeroindex-ai/ask-zeroindex/eval-baselines.md`](https://github.com/zeroindex-ai/ask-zeroindex/blob/main/eval-baselines.md)
