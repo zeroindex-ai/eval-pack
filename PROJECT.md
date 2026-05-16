@@ -1,6 +1,6 @@
 # eval-pack — Project Documentation
 
-> **Status: shipped** — `@zeroindex-ai/eval-pack` v0.1.1 on npm. Core + Claude judge + HTML report + CLI + composite GitHub action, dogfooded end-to-end by `ask-zeroindex`.
+> **Status: shipped** — `@zeroindex-ai/eval-pack` v0.2.0 on npm. Core + Claude judge + HTML report + CLI + composite GitHub action, dogfooded end-to-end by `ask-zeroindex`.
 
 This document captures the scope, strategic decisions, architecture, public API contracts, distribution shape, and ordered work list for `eval-pack`. It exists to:
 
@@ -65,7 +65,7 @@ Load-bearing decisions, documented because the *why* often outlasts the *what*.
 | **Validation** | Zod 4 | Already in the stack. Needed at golden-set load + judge-output parse boundaries. |
 | **Tests** | Vitest | Already in `mcp-pack` and `ask-zeroindex`. |
 | **Bundling** | `tsc` per build, output to `dist/` | Same as `mcp-pack`. No bundler complexity for a Node-only library. |
-| **LLM SDK in judge** | Direct `@anthropic-ai/sdk` for v0.1 | Avoids adding an AI SDK runtime dependency for a one-provider start. v0.2 introduces an adapter when adding OpenAI. |
+| **LLM SDK in judge** | Direct `@anthropic-ai/sdk`; **optional `peerDependency` as of 0.2.0** | Avoids adding an AI SDK runtime dependency for a one-provider start. As of 0.2.0 the SDK is an optional peer — consumers using the Claude judge install it themselves; `--judge none` users skip it. The CLI imports the Claude judge dynamically so the SDK is only required at the moment of judge construction. v0.2 introduces an adapter when adding OpenAI. |
 | **CLI framework** | No framework — manual `process.argv` parsing + small `--flag` helper | Following `ask-zeroindex`'s lean script convention. `commander` / `yargs` are overkill at ≤8 flags. |
 | **Report renderer** | Single-file static HTML, no client JS | One self-contained artifact per run. Works as a GitHub Actions artifact, opens in any browser, embeds via iframe. Zero hosting requirement. |
 | **Package manager** | pnpm 10 | Same as `mcp-pack` and `ask-zeroindex`. |
@@ -505,10 +505,21 @@ pnpm exec eval-pack run \
 
 ### Cutting a release
 
-1. Confirm green CI on main.
-2. Update CHANGELOG.
-3. `pnpm version <patch|minor|major>` → tag → push.
-4. CI publishes to npm and updates the moving `v1` action tag.
+Automated as of 0.2.0 via `.github/workflows/release.yml`:
+
+1. Update `CHANGELOG.md` with the new version section.
+2. Bump `version` in `package.json`.
+3. Commit and push to `main`.
+4. `git tag v<version>` (must match `package.json` version exactly).
+5. `git push --tags`.
+6. The workflow runs: `pnpm install --frozen-lockfile`, `pnpm build`,
+   `pnpm test`, version-tag-match check, `npm publish --provenance
+   --access public`, and `gh release create`. Required repo secret:
+   `NPM_TOKEN` (an "Automation" token from npmjs.org with publish scope).
+
+**Manual fallback** — if the workflow needs to be bypassed: confirm green CI
+on main, then `pnpm publish --provenance --access public` locally with an
+authenticated npm session.
 
 ---
 

@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/@zeroindex-ai/eval-pack.svg)](https://www.npmjs.com/package/@zeroindex-ai/eval-pack)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Status: v0.1 pre-release.** API may change with feedback. See [PROJECT.md](./PROJECT.md) for design, decisions, and the ordered work list.
+> **Status: v0.2.0.** API may change with feedback. See [PROJECT.md](./PROJECT.md) for design, decisions, and the ordered work list.
 
 ## What this is
 
@@ -20,11 +20,14 @@ What it deliberately is not: a heavyweight platform. No service to host, no prop
 ## Install
 
 ```bash
+# minimal — no judge
 pnpm add -D @zeroindex-ai/eval-pack
-# or: npm install --save-dev @zeroindex-ai/eval-pack
+
+# with Claude judge (default)
+pnpm add -D @zeroindex-ai/eval-pack @anthropic-ai/sdk
 ```
 
-Requires Node 20+. `@anthropic-ai/sdk` is included as a regular dependency for the Claude judge.
+Requires Node 20+. As of v0.2.0, `@anthropic-ai/sdk` is an optional `peerDependency`. Install it alongside `eval-pack` if you use the Claude judge; omit it if you only run `--judge none` (programmatic checks only).
 
 ## Quick start
 
@@ -217,6 +220,7 @@ CI runs the same gates across Node 20, 22, and 24 on every PR and push to `main`
 
 - ✅ **v0.1** — core, Claude judge, HTML report, CLI
 - ✅ **v0.1.x** — `ask-zeroindex` reference port, GitHub composite action, dummy-agent example, `evals.zeroindex.ai` published reports
+- ✅ **v0.2.0** — `@anthropic-ai/sdk` moved to optional `peerDependency`; tag-driven `release.yml` workflow with npm provenance
 - 🔭 **v0.2 candidates** — OpenAI / Gemini judges (adapter pattern), agent-specific primitives (tool-call assertions, trajectory grading), run-over-run diffing + regression detection
 
 Full design + decision log + ordered work list: **[PROJECT.md](./PROJECT.md)**.

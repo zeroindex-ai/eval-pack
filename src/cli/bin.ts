@@ -3,7 +3,6 @@ import { writeFile } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { runEval, type RunFilter } from '../core/runner.js';
-import { claudeJudge } from '../judge-claude/index.js';
 import { renderHtml } from '../report-html/index.js';
 import type { Judge, Subject } from '../core/schema.js';
 import {
@@ -65,10 +64,16 @@ async function main(): Promise<void> {
   const subject = await loadSubject(args.subject);
   const goldenPath = args.golden ?? 'evals/golden.json';
 
+  // Dynamically import the Claude judge only when needed. `@anthropic-ai/sdk`
+  // is an optional peerDependency as of 0.2.0 — consumers using `--judge none`
+  // must not pay the SDK import cost (or fail at module load if the SDK
+  // isn't installed).
   const useClaude = (args.judge ?? 'claude') === 'claude';
-  const judge: Judge | undefined = useClaude
-    ? claudeJudge(args.judgeModel !== undefined ? { model: args.judgeModel } : {})
-    : undefined;
+  let judge: Judge | undefined;
+  if (useClaude) {
+    const { claudeJudge } = await import('../judge-claude/index.js');
+    judge = claudeJudge(args.judgeModel !== undefined ? { model: args.judgeModel } : {});
+  }
 
   const threshold = resolveThreshold(args.threshold, process.env['EVAL_PASS_THRESHOLD']);
   const throttleMs = resolveThrottleMs(args.throttleMs, process.env['EVAL_THROTTLE_MS']);

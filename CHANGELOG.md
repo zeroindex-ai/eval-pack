@@ -9,6 +9,21 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-05-16
+
+### Changed
+- **BREAKING:** `@anthropic-ai/sdk` moved from `dependencies` to
+  `peerDependencies` (optional). Consumers using the Claude judge must now
+  install `@anthropic-ai/sdk` directly. Consumers using `--judge none` no
+  longer pull it in. The CLI now imports the Claude judge dynamically so
+  `--judge none` runs cleanly when the SDK is not installed.
+
+### Added
+- Tag-driven `release.yml` GitHub Actions workflow for automated
+  `npm publish` with provenance. Pushing a `v*` tag now runs build + test +
+  version-tag-match check, then publishes with `--provenance --access public`
+  and cuts a GitHub Release.
+
 ## [0.1.1] - 2026-05-13
 
 ### Added
@@ -52,6 +67,7 @@ pipeline that runs inside `ask-zeroindex`, generalised into a reusable package.
   keys required).
 - CI matrix across Node 20, 22, 24.
 
-[Unreleased]: https://github.com/zeroindex-ai/eval-pack/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/zeroindex-ai/eval-pack/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/zeroindex-ai/eval-pack/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/zeroindex-ai/eval-pack/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/zeroindex-ai/eval-pack/releases/tag/v0.1.0
