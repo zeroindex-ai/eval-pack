@@ -6,7 +6,13 @@ import { runEval, type RunFilter } from '../core/runner.js';
 import { claudeJudge } from '../judge-claude/index.js';
 import { renderHtml } from '../report-html/index.js';
 import type { Judge, Subject } from '../core/schema.js';
-import { HELP, UsageError, parseArgs } from './parseArgs.js';
+import {
+  HELP,
+  UsageError,
+  parseArgs,
+  resolveThreshold,
+  resolveThrottleMs,
+} from './parseArgs.js';
 import { printSummary } from './stdoutPrinter.js';
 
 async function loadSubject(path: string): Promise<Subject> {
@@ -64,13 +70,8 @@ async function main(): Promise<void> {
     ? claudeJudge(args.judgeModel !== undefined ? { model: args.judgeModel } : {})
     : undefined;
 
-  const thresholdEnv = process.env['EVAL_PASS_THRESHOLD'];
-  const threshold =
-    args.threshold ?? (thresholdEnv !== undefined ? Number(thresholdEnv) : undefined);
-
-  const throttleEnv = process.env['EVAL_THROTTLE_MS'];
-  const throttleMs =
-    args.throttleMs ?? (throttleEnv !== undefined ? Number(throttleEnv) : 0);
+  const threshold = resolveThreshold(args.threshold, process.env['EVAL_PASS_THRESHOLD']);
+  const throttleMs = resolveThrottleMs(args.throttleMs, process.env['EVAL_THROTTLE_MS']);
 
   const report = await runEval({
     golden: goldenPath,

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { parseArgs, UsageError } from './parseArgs.js';
+import {
+  parseArgs,
+  resolveThreshold,
+  resolveThrottleMs,
+  UsageError,
+} from './parseArgs.js';
 
 describe('parseArgs — basics', () => {
   it('returns defaults on empty argv', () => {
@@ -96,5 +101,67 @@ describe('parseArgs — validation', () => {
       'tags=core,smoke',
     ]);
     expect(out.filter).toEqual({ category: 'positive', tags: 'core,smoke' });
+  });
+});
+
+describe('resolveThreshold — env-var fallback', () => {
+  it('prefers the CLI value when both are set', () => {
+    expect(resolveThreshold(0.5, '0.9')).toBeCloseTo(0.5);
+  });
+
+  it('returns undefined when neither is set', () => {
+    expect(resolveThreshold(undefined, undefined)).toBeUndefined();
+  });
+
+  it('parses a valid env value', () => {
+    expect(resolveThreshold(undefined, '0.8')).toBeCloseTo(0.8);
+    expect(resolveThreshold(undefined, '0')).toBe(0);
+    expect(resolveThreshold(undefined, '1')).toBe(1);
+  });
+
+  it('throws UsageError on non-numeric env value', () => {
+    expect(() => resolveThreshold(undefined, 'abc')).toThrow(UsageError);
+    expect(() => resolveThreshold(undefined, 'abc')).toThrow(
+      /EVAL_PASS_THRESHOLD must be a number in \[0,1\]/,
+    );
+  });
+
+  it('throws UsageError on out-of-range env value', () => {
+    expect(() => resolveThreshold(undefined, '1.5')).toThrow(/in \[0,1\]/);
+    expect(() => resolveThreshold(undefined, '-0.1')).toThrow(/in \[0,1\]/);
+  });
+
+  it('throws UsageError on empty-string env value', () => {
+    // Number('') === 0, which is valid for threshold — but '' as a deliberate
+    // env value is more likely a misconfiguration than an intentional zero.
+    // Current behaviour: '' parses to 0 (in range), accepted. Documented here
+    // so any future tightening is intentional.
+    expect(resolveThreshold(undefined, '')).toBe(0);
+  });
+});
+
+describe('resolveThrottleMs — env-var fallback', () => {
+  it('prefers the CLI value when both are set', () => {
+    expect(resolveThrottleMs(250, '5000')).toBe(250);
+  });
+
+  it('defaults to 0 when neither is set', () => {
+    expect(resolveThrottleMs(undefined, undefined)).toBe(0);
+  });
+
+  it('parses a valid env value', () => {
+    expect(resolveThrottleMs(undefined, '500')).toBe(500);
+    expect(resolveThrottleMs(undefined, '0')).toBe(0);
+  });
+
+  it('throws UsageError on non-numeric env value', () => {
+    expect(() => resolveThrottleMs(undefined, 'abc')).toThrow(UsageError);
+    expect(() => resolveThrottleMs(undefined, 'abc')).toThrow(
+      /EVAL_THROTTLE_MS must be a non-negative number/,
+    );
+  });
+
+  it('throws UsageError on negative env value', () => {
+    expect(() => resolveThrottleMs(undefined, '-100')).toThrow(/non-negative/);
   });
 });

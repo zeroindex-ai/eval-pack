@@ -141,6 +141,52 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   return out;
 }
 
+// ---- env-var fallback parsing --------------------------------------------
+// Resolve numeric flags from env when the CLI flag isn't set. Validates the
+// env value the same way the flag-form would, so a bogus EVAL_THROTTLE_MS=abc
+// raises a UsageError instead of silently propagating NaN downstream.
+
+/**
+ * Resolve a pass-rate threshold in [0,1]. Returns `cliValue` when set,
+ * otherwise parses `envValue` (typically `process.env.EVAL_PASS_THRESHOLD`).
+ * Throws `UsageError` for non-finite or out-of-range env values.
+ */
+export function resolveThreshold(
+  cliValue: number | undefined,
+  envValue: string | undefined,
+): number | undefined {
+  if (cliValue !== undefined) return cliValue;
+  if (envValue === undefined) return undefined;
+  const n = Number(envValue);
+  if (!Number.isFinite(n) || n < 0 || n > 1) {
+    throw new UsageError(
+      `EVAL_PASS_THRESHOLD must be a number in [0,1], got ${envValue}`,
+    );
+  }
+  return n;
+}
+
+/**
+ * Resolve a non-negative throttle-ms. Returns `cliValue` when set, otherwise
+ * parses `envValue` (typically `process.env.EVAL_THROTTLE_MS`), defaulting to
+ * 0 when neither is set. Throws `UsageError` for non-finite or negative env
+ * values.
+ */
+export function resolveThrottleMs(
+  cliValue: number | undefined,
+  envValue: string | undefined,
+): number {
+  if (cliValue !== undefined) return cliValue;
+  if (envValue === undefined) return 0;
+  const n = Number(envValue);
+  if (!Number.isFinite(n) || n < 0) {
+    throw new UsageError(
+      `EVAL_THROTTLE_MS must be a non-negative number, got ${envValue}`,
+    );
+  }
+  return n;
+}
+
 export const HELP = `Usage: eval-pack run [options]
 
 Options:

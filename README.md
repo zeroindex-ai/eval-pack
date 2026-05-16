@@ -128,7 +128,10 @@ Options:
   --judge <name>           "claude" or "none" (default: claude)
   --judge-model <id>       Override judge model (default: claude-sonnet-4-6)
   --threshold <ratio>      Pass-rate threshold 0–1
-  --filter <key=value>     Filter golden items (repeatable: category, tags)
+  --filter <key=value>     Filter golden items (repeatable: category, tags).
+                           Tags accepts a comma-separated list — items match
+                           if they have ANY of the listed tags.
+                           e.g. --filter tags=smoke,core
   --limit <n>              Max items to run
   --throttle-ms <n>        Sleep between items (vendor rate-limit hedging)
   --results-dir <path>     Where to write run JSON (default: evals/results)
