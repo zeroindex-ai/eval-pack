@@ -57,8 +57,7 @@ const happySubject: Subject = async (question) => ({
 
 const yesJudge: Judge = {
   name: 'fake-yes-judge',
-  run: async () =>
-    ({ appropriate: 'yes', grounded: 'yes', reason: 'fine' }) as Judgment,
+  run: async () => ({ appropriate: 'yes', grounded: 'yes', reason: 'fine' }) as Judgment,
 };
 
 // ---- tests --------------------------------------------------------------

@@ -12,6 +12,7 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
 ## [0.2.0] - 2026-05-16
 
 ### Changed
+
 - **BREAKING:** `@anthropic-ai/sdk` moved from `dependencies` to
   `peerDependencies` (optional). Consumers using the Claude judge must now
   install `@anthropic-ai/sdk` directly. Consumers using `--judge none` no
@@ -19,6 +20,7 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
   `--judge none` runs cleanly when the SDK is not installed.
 
 ### Added
+
 - Tag-driven `release.yml` GitHub Actions workflow for automated
   `npm publish` with provenance. Pushing a `v*` tag now runs build + test +
   version-tag-match check, then publishes with `--provenance --access public`
@@ -27,6 +29,7 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
 ## [0.1.1] - 2026-05-13
 
 ### Added
+
 - `default` condition on every subpath export in `package.json` so resolvers
   that don't recognise the `import` condition (older bundlers, some test
   runners) still resolve the ESM entrypoint instead of failing with
@@ -38,6 +41,7 @@ Initial public release. Lift-and-shift of the LLM-as-judge + programmatic-checks
 pipeline that runs inside `ask-zeroindex`, generalised into a reusable package.
 
 ### Added
+
 - Core contracts and types: `Subject`, `Judge`, `GoldenItem`, `GoldenSet`,
   `Result`, `PartialResult`, `Check`, `CheckResult`, `Judgment`, with Zod
   schemas at the two trust boundaries (golden JSON, judge response).

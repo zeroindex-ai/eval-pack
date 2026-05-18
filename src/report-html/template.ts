@@ -31,9 +31,7 @@ function checkDetail(c: CheckResult): string {
 
 function renderChecks(checks: CheckResult[]): string {
   if (checks.length === 0) return '<em>no checks configured</em>';
-  return checks
-    .map((c) => `<div>${checkTag(c)} ${checkDetail(c)}</div>`)
-    .join('\n');
+  return checks.map((c) => `<div>${checkTag(c)} ${checkDetail(c)}</div>`).join('\n');
 }
 
 function renderResultBody(r: Result): string {

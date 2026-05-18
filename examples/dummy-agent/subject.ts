@@ -7,8 +7,7 @@ import type { Subject } from '../../src/core/schema.js';
 const FAQ: Record<string, string> = {
   'what is your name?': "I'm DummyBot.",
   'what is 2+2?': '2 + 2 = 4.',
-  'what is your purpose?':
-    "I'm a demonstration subject for the eval-pack examples — I answer a fixed FAQ.",
+  'what is your purpose?': "I'm a demonstration subject for the eval-pack examples — I answer a fixed FAQ.",
   'who created you?': 'I was scaffolded by @zeroindex-ai/eval-pack as a non-RAG example.',
 };
 

@@ -18,9 +18,7 @@ import type { CitationExtractor } from './schema.js';
  */
 export function markerCitationExtractor(pattern: RegExp): CitationExtractor {
   if (!pattern.global) {
-    throw new Error(
-      `markerCitationExtractor: regex must have the 'g' flag (received ${pattern.toString()})`,
-    );
+    throw new Error(`markerCitationExtractor: regex must have the 'g' flag (received ${pattern.toString()})`);
   }
   return (text) => {
     const refs = new Set<string>();

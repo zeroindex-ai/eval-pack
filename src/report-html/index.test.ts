@@ -66,7 +66,7 @@ describe('renderHtml — headline pass rate', () => {
           makeResult({ id: 'c', pass: false }),
           makeResult({ id: 'd', pass: false }),
         ],
-      }),
+      })
     );
     expect(out).toContain('50.0%');
   });
@@ -81,10 +81,7 @@ describe('renderHtml — headline pass rate', () => {
 
   it('marks pass-rate red (bad class) when below threshold', () => {
     const half = makeReport({
-      results: [
-        makeResult({ id: 'a', pass: true }),
-        makeResult({ id: 'b', pass: false }),
-      ],
+      results: [makeResult({ id: 'a', pass: true }), makeResult({ id: 'b', pass: false })],
     });
     expect(renderHtml(half, { threshold: 0.8 })).toContain('pass-rate bad');
   });
@@ -109,7 +106,7 @@ describe('renderHtml — category table', () => {
           makeResult({ id: 'b', category: 'positive', pass: false }),
           makeResult({ id: 'c', category: 'negative', pass: true }),
         ],
-      }),
+      })
     );
     expect(out).toContain('<code>positive</code>');
     expect(out).toContain('1/2');
@@ -128,7 +125,7 @@ describe('renderHtml — failures section', () => {
           makeResult({ id: 'fail-1', pass: false, text: 'broken answer' }),
           makeResult({ id: 'pass-1', pass: true }),
         ],
-      }),
+      })
     );
     expect(out).toContain('<h2>Failures (1)</h2>');
     expect(out).toContain('<code>fail-1</code>');
@@ -146,7 +143,7 @@ describe('renderHtml — passing section (collapsed)', () => {
     const out = renderHtml(
       makeReport({
         results: [makeResult({ id: 'pass-1' }), makeResult({ id: 'pass-2' })],
-      }),
+      })
     );
     expect(out).toContain('<h2>Passing (2)</h2>');
     expect(out).toContain('<code>pass-1</code>');
@@ -156,9 +153,7 @@ describe('renderHtml — passing section (collapsed)', () => {
 
 describe('renderHtml — errors section', () => {
   it('renders an errors table when report.errors is non-empty', () => {
-    const out = renderHtml(
-      makeReport({ errors: [{ id: 'boom', error: 'fetch failed' }] }),
-    );
+    const out = renderHtml(makeReport({ errors: [{ id: 'boom', error: 'fetch failed' }] }));
     expect(out).toContain('<h2>Errors (1)</h2>');
     expect(out).toContain('<code>boom</code>');
     expect(out).toContain('fetch failed');
@@ -174,7 +169,7 @@ describe('renderHtml — escaping', () => {
     const out = renderHtml(
       makeReport({
         results: [makeResult({ pass: false, text: '<script>alert("xss")</script>' })],
-      }),
+      })
     );
     expect(out).not.toContain('<script>alert');
     expect(out).toContain('&lt;script&gt;alert');
@@ -189,7 +184,7 @@ describe('renderHtml — escaping', () => {
             judgment: { appropriate: 'no', grounded: 'no', reason: '<bad>tag</bad>' },
           }),
         ],
-      }),
+      })
     );
     expect(out).not.toContain('<bad>tag</bad>');
     expect(out).toContain('&lt;bad&gt;tag&lt;/bad&gt;');
@@ -202,7 +197,7 @@ describe('renderHtml — redact hook', () => {
       makeReport({
         results: [makeResult({ pass: false, text: 'sensitive content' })],
       }),
-      { redact: (r) => ({ ...r, text: '[REDACTED]' }) },
+      { redact: (r) => ({ ...r, text: '[REDACTED]' }) }
     );
     expect(out).not.toContain('sensitive content');
     expect(out).toContain('[REDACTED]');

@@ -19,11 +19,7 @@ export const DEFAULT_CATEGORY_GUIDANCE = `Expected behaviors per category:
  * Build the per-item user prompt for the judge. The text is JSON.stringify'd
  * before interpolation so newlines / quotes don't break the format.
  */
-export function buildPrompt(
-  item: GoldenItem,
-  result: PartialResult,
-  categoryGuidance: string,
-): string {
+export function buildPrompt(item: GoldenItem, result: PartialResult, categoryGuidance: string): string {
   return `Original question: ${JSON.stringify(item.question)}
 Category: ${item.category}
 ${categoryGuidance}

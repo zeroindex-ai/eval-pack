@@ -3,9 +3,7 @@ import { parseJudgeResponse } from './parse.js';
 
 describe('parseJudgeResponse', () => {
   it('parses a clean JSON judgment', () => {
-    const out = parseJudgeResponse(
-      '{"appropriate":"yes","grounded":"yes","reason":"on topic"}',
-    );
+    const out = parseJudgeResponse('{"appropriate":"yes","grounded":"yes","reason":"on topic"}');
     expect(out).toEqual({ appropriate: 'yes', grounded: 'yes', reason: 'on topic' });
   });
 
@@ -32,12 +30,8 @@ describe('parseJudgeResponse', () => {
   });
 
   it('throws on enum values outside the contract', () => {
-    expect(() =>
-      parseJudgeResponse('{"appropriate":"maybe","grounded":"yes","reason":"x"}'),
-    ).toThrow();
-    expect(() =>
-      parseJudgeResponse('{"appropriate":"yes","grounded":"sometimes","reason":"x"}'),
-    ).toThrow();
+    expect(() => parseJudgeResponse('{"appropriate":"maybe","grounded":"yes","reason":"x"}')).toThrow();
+    expect(() => parseJudgeResponse('{"appropriate":"yes","grounded":"sometimes","reason":"x"}')).toThrow();
   });
 
   it('trims surrounding whitespace before parsing', () => {

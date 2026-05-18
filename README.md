@@ -33,12 +33,7 @@ Requires Node 20+. As of v0.2.0, `@anthropic-ai/sdk` is an optional `peerDepende
 
 ```ts
 // evals/eval.ts
-import {
-  runEval,
-  mustMention,
-  citationCount,
-  markerCitationExtractor,
-} from '@zeroindex-ai/eval-pack';
+import { runEval, mustMention, citationCount, markerCitationExtractor } from '@zeroindex-ai/eval-pack';
 import { claudeJudge } from '@zeroindex-ai/eval-pack/judge-claude';
 
 // 1. Wrap your pipeline as a `subject` function.
@@ -53,10 +48,7 @@ const report = await runEval({
   golden: 'evals/golden.json',
   subject,
   citationExtractor: markerCitationExtractor(/\[chunk:(\d+)\]/g),
-  checks: [
-    mustMention(),
-    citationCount({ min: 1, skipWhen: (item) => item.expect_refusal === true }),
-  ],
+  checks: [mustMention(), citationCount({ min: 1, skipWhen: (item) => item.expect_refusal === true })],
   judge: claudeJudge({ model: 'claude-sonnet-4-6' }),
   resultsDir: 'evals/results',
 });
@@ -101,22 +93,22 @@ Only `id`, `category`, and `question` are required. `category` is free-form — 
 
 ## Package exports
 
-| Subpath | What | Key exports |
-|---|---|---|
-| `@zeroindex-ai/eval-pack` | Core | `runEval`, types, built-in checks, citation extractors, `defaultPassRule`, `byCategory`, metrics |
-| `@zeroindex-ai/eval-pack/checks` | Convenience re-export | The four built-in checks |
-| `@zeroindex-ai/eval-pack/judge-claude` | Claude judge | `claudeJudge()` factory, default prompt builders |
-| `@zeroindex-ai/eval-pack/report-html` | Report renderer | `renderHtml(report, opts)` |
-| `eval-pack` (CLI binary) | Command-line entry | `eval-pack run [options]` |
+| Subpath                                | What                  | Key exports                                                                                      |
+| -------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------ |
+| `@zeroindex-ai/eval-pack`              | Core                  | `runEval`, types, built-in checks, citation extractors, `defaultPassRule`, `byCategory`, metrics |
+| `@zeroindex-ai/eval-pack/checks`       | Convenience re-export | The four built-in checks                                                                         |
+| `@zeroindex-ai/eval-pack/judge-claude` | Claude judge          | `claudeJudge()` factory, default prompt builders                                                 |
+| `@zeroindex-ai/eval-pack/report-html`  | Report renderer       | `renderHtml(report, opts)`                                                                       |
+| `eval-pack` (CLI binary)               | Command-line entry    | `eval-pack run [options]`                                                                        |
 
 ## Built-in checks
 
-| Check | What it asserts |
-|---|---|
-| `mustMention(opts?)` | Every term in `item.must_mention` appears in the answer (case-insensitive by default; set `caseSensitive: true` for exact) |
-| `mustNotMention(opts?)` | No term in `item.must_not_mention` appears |
-| `citationCount({ min, skipWhen? })` | `result.citationRefs.length >= min`, with optional auto-skip for refusal items |
-| `expectRefusal({ phrases? })` | Heuristic refusal detection. Passes when `item.expect_refusal === (actual refusal detected)`. Auto-skips items without `expect_refusal` set. |
+| Check                               | What it asserts                                                                                                                              |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mustMention(opts?)`                | Every term in `item.must_mention` appears in the answer (case-insensitive by default; set `caseSensitive: true` for exact)                   |
+| `mustNotMention(opts?)`             | No term in `item.must_not_mention` appears                                                                                                   |
+| `citationCount({ min, skipWhen? })` | `result.citationRefs.length >= min`, with optional auto-skip for refusal items                                                               |
+| `expectRefusal({ phrases? })`       | Heuristic refusal detection. Passes when `item.expect_refusal === (actual refusal detected)`. Auto-skips items without `expect_refusal` set. |
 
 Custom checks are functions with the shape `(item: GoldenItem, partial: PartialResult) => CheckResult`. No DSL, no plugin registration — just write a function and pass it.
 
@@ -161,7 +153,7 @@ on:
     branches: [main]
   pull_request:
   schedule:
-    - cron: "0 14 * * *"
+    - cron: '0 14 * * *'
   workflow_dispatch:
 
 jobs:
@@ -174,7 +166,7 @@ jobs:
         with:
           golden: evals/golden.json
           subject: ./evals/subject.ts
-          threshold: "0.8"
+          threshold: '0.8'
           html-out: evals/results/latest.html
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

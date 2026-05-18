@@ -32,13 +32,13 @@ The eval methodology that powers `ask-zeroindex` (LLM-as-judge + programmatic ch
 
 ### Goals & success criteria for v0.1
 
-| Goal | Metric | Status |
-|---|---|---|
-| `ask-zeroindex` consumes `eval-pack` instead of inlined harness | The 30-query seed run reproduces the documented 90% pass rate from `eval-baselines.md` | ✅ |
-| Second consumer proves the contract isn't RAG-shaped | `examples/dummy-agent` runs eval-pack against a non-RAG subject with a tiny golden set | ✅ |
-| Public HTML report | `evals.zeroindex.ai/ask-zeroindex/latest` live | ✅ |
-| Reusable GitHub composite action | Consumer workflow drops from ~35 lines to ~10 | ✅ |
-| Published to npm | `@zeroindex-ai/eval-pack` v0.1.0 public on npmjs.com | ✅ |
+| Goal                                                            | Metric                                                                                 | Status |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------ |
+| `ask-zeroindex` consumes `eval-pack` instead of inlined harness | The 30-query seed run reproduces the documented 90% pass rate from `eval-baselines.md` | ✅     |
+| Second consumer proves the contract isn't RAG-shaped            | `examples/dummy-agent` runs eval-pack against a non-RAG subject with a tiny golden set | ✅     |
+| Public HTML report                                              | `evals.zeroindex.ai/ask-zeroindex/latest` live                                         | ✅     |
+| Reusable GitHub composite action                                | Consumer workflow drops from ~35 lines to ~10                                          | ✅     |
+| Published to npm                                                | `@zeroindex-ai/eval-pack` v0.1.0 public on npmjs.com                                   | ✅     |
 
 ### Out of scope (for v0.1)
 
@@ -54,61 +54,61 @@ The eval methodology that powers `ask-zeroindex` (LLM-as-judge + programmatic ch
 
 ## 2. Strategic decisions log
 
-Load-bearing decisions, documented because the *why* often outlasts the *what*.
+Load-bearing decisions, documented because the _why_ often outlasts the _what_.
 
 ### Stack picks
 
-| Decision | Choice | Reasoning |
-|---|---|---|
-| **Repo layout** | Single-package monorepo at `github.com/zeroindex-ai/eval-pack` | The pieces (core, judge, report, cli) are always installed together by the same user for the same project. The dep-graph split that justifies `mcp-pack`'s 4 separate packages does not exist here. Single package with subpath exports gives the same import ergonomics and clean module boundaries without 5 `package.json` files and 5 release pipelines. |
-| **Language** | TypeScript, ESM-only | Consistent with `mcp-pack` and `ask-zeroindex`. |
-| **Validation** | Zod 4 | Already in the stack. Needed at golden-set load + judge-output parse boundaries. |
-| **Tests** | Vitest | Already in `mcp-pack` and `ask-zeroindex`. |
-| **Bundling** | `tsc` per build, output to `dist/` | Same as `mcp-pack`. No bundler complexity for a Node-only library. |
+| Decision             | Choice                                                                | Reasoning                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Repo layout**      | Single-package monorepo at `github.com/zeroindex-ai/eval-pack`        | The pieces (core, judge, report, cli) are always installed together by the same user for the same project. The dep-graph split that justifies `mcp-pack`'s 4 separate packages does not exist here. Single package with subpath exports gives the same import ergonomics and clean module boundaries without 5 `package.json` files and 5 release pipelines.      |
+| **Language**         | TypeScript, ESM-only                                                  | Consistent with `mcp-pack` and `ask-zeroindex`.                                                                                                                                                                                                                                                                                                                   |
+| **Validation**       | Zod 4                                                                 | Already in the stack. Needed at golden-set load + judge-output parse boundaries.                                                                                                                                                                                                                                                                                  |
+| **Tests**            | Vitest                                                                | Already in `mcp-pack` and `ask-zeroindex`.                                                                                                                                                                                                                                                                                                                        |
+| **Bundling**         | `tsc` per build, output to `dist/`                                    | Same as `mcp-pack`. No bundler complexity for a Node-only library.                                                                                                                                                                                                                                                                                                |
 | **LLM SDK in judge** | Direct `@anthropic-ai/sdk`; **optional `peerDependency` as of 0.2.0** | Avoids adding an AI SDK runtime dependency for a one-provider start. As of 0.2.0 the SDK is an optional peer — consumers using the Claude judge install it themselves; `--judge none` users skip it. The CLI imports the Claude judge dynamically so the SDK is only required at the moment of judge construction. v0.2 introduces an adapter when adding OpenAI. |
-| **CLI framework** | No framework — manual `process.argv` parsing + small `--flag` helper | Following `ask-zeroindex`'s lean script convention. `commander` / `yargs` are overkill at ≤8 flags. |
-| **Report renderer** | Single-file static HTML, no client JS | One self-contained artifact per run. Works as a GitHub Actions artifact, opens in any browser, embeds via iframe. Zero hosting requirement. |
-| **Package manager** | pnpm 10 | Same as `mcp-pack` and `ask-zeroindex`. |
-| **Node** | 24 LTS | Same as the rest of the rotation. |
-| **License** | MIT | Matches `mcp-pack`. Apache-2.0's patent grant matters when companies *contribute* upstream; for a tool they *consume*, MIT is what every enterprise legal team has already pre-cleared. |
+| **CLI framework**    | No framework — manual `process.argv` parsing + small `--flag` helper  | Following `ask-zeroindex`'s lean script convention. `commander` / `yargs` are overkill at ≤8 flags.                                                                                                                                                                                                                                                               |
+| **Report renderer**  | Single-file static HTML, no client JS                                 | One self-contained artifact per run. Works as a GitHub Actions artifact, opens in any browser, embeds via iframe. Zero hosting requirement.                                                                                                                                                                                                                       |
+| **Package manager**  | pnpm 10                                                               | Same as `mcp-pack` and `ask-zeroindex`.                                                                                                                                                                                                                                                                                                                           |
+| **Node**             | 24 LTS                                                                | Same as the rest of the rotation.                                                                                                                                                                                                                                                                                                                                 |
+| **License**          | MIT                                                                   | Matches `mcp-pack`. Apache-2.0's patent grant matters when companies _contribute_ upstream; for a tool they _consume_, MIT is what every enterprise legal team has already pre-cleared.                                                                                                                                                                           |
 
 ### Things deliberately NOT chosen
 
-| Avoided | Why |
-|---|---|
+| Avoided                                                                                              | Why                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Five-package split (`eval-core`, `eval-judge-claude`, `eval-report-html`, `eval-cli`, `eval-action`) | Initial draft favored this for mcp-pack consistency. Rejected on second pass: nobody installs `eval-core` alone, the dep graph is artificial, and the release/version coordination overhead is real. The mcp-pack split is honest because each server wraps a different vendor with different consumers. This case isn't symmetric. |
-| `commander` / `yargs` / `clipanion` for the CLI | <8 flags. Hand-rolled parsing is ~30 lines and zero deps. |
-| LangChain / LangSmith / Braintrust / promptfoo style heavy framework | Each is a fine product. None match the philosophy: this is a small library used as a building block, not a platform. |
-| AI SDK adapter in v0.1 | Real adapter design needs a second provider implementation to validate against. Premature otherwise. |
-| OpenAI / Gemini judges in v0.1 | See above. |
-| Built-in regression-detection / run diffing | Useful, but introduces history storage opinion. Deferred to v0.2. |
-| Multi-turn conversation evals | Single-turn covers the current consumer (`ask-zeroindex`) and the next three. Multi-turn lands when `intake-zero` needs it. |
+| `commander` / `yargs` / `clipanion` for the CLI                                                      | <8 flags. Hand-rolled parsing is ~30 lines and zero deps.                                                                                                                                                                                                                                                                           |
+| LangChain / LangSmith / Braintrust / promptfoo style heavy framework                                 | Each is a fine product. None match the philosophy: this is a small library used as a building block, not a platform.                                                                                                                                                                                                                |
+| AI SDK adapter in v0.1                                                                               | Real adapter design needs a second provider implementation to validate against. Premature otherwise.                                                                                                                                                                                                                                |
+| OpenAI / Gemini judges in v0.1                                                                       | See above.                                                                                                                                                                                                                                                                                                                          |
+| Built-in regression-detection / run diffing                                                          | Useful, but introduces history storage opinion. Deferred to v0.2.                                                                                                                                                                                                                                                                   |
+| Multi-turn conversation evals                                                                        | Single-turn covers the current consumer (`ask-zeroindex`) and the next three. Multi-turn lands when `intake-zero` needs it.                                                                                                                                                                                                         |
 
 ### Architecture decisions
 
-| Decision | Choice | Reasoning |
-|---|---|---|
-| **User-supplied subject function** | `Subject = (question: string) => Promise<AnswerResult>` | The library never imports a user's stack. The user wraps their own pipeline in a closure; the harness orchestrates. Keeps `eval-pack` zero-knowledge about retrieval, models, vector stores. |
-| **Pluggable citation extractor** | `CitationExtractor = (text: string) => string[]` | `ask-zeroindex` uses `[chunk:N]` markers; other projects use `[doc:url]`, structured tool calls, or no citations at all. Ship `markerCitationExtractor(regex)` + `noopCitationExtractor`. |
-| **Composable check pipeline** | Each check is `(item, result) => CheckResult` | The 4 built-ins cover the current consumer. Users add custom checks by writing functions. No DSL, no config file. |
-| **Pass rule overridable** | Default rule matches `ask-zeroindex`'s current logic; users pass `passRule: (Result) => boolean` to override | Avoids hardcoding the `programmatic && judge.appropriate==='yes'` shape. |
-| **Pluggable judge interface** | `Judge = { name, run: (item, result) => Promise<Judgment> }` | The judge is an LLM call; doesn't belong baked into `runEval`. Ship `claudeJudge({model})`; future `openaiJudge()` slots into the same interface. |
-| **Throttle handling at the runner** | `throttleMs` config, sleep between items | Voyage free tier (3 RPM) was the actual constraint on `ask-zeroindex`'s eval; rather than make every subject re-invent throttling, do it once at the orchestrator. |
-| **Per-item error tolerance** | If a single item throws, log and continue; aggregate pass-rate uses only successful items; runner exits non-zero if zero items succeeded | Matches `ask-zeroindex/evals/run.ts` behavior. A flaky network call shouldn't kill the run. |
-| **Threshold gating in CLI, not core** | `runEval()` returns results; CLI checks threshold and sets exit code | Library users may want to do their own thresholding (e.g., per-category). Keeps the core API a pure function. |
-| **Results JSON shape** | `{ model, ran, results: Result[] }` — matches existing `ask-zeroindex` format | Backwards-compatible with existing baseline files; no migration needed for historical comparison. |
+| Decision                              | Choice                                                                                                                                   | Reasoning                                                                                                                                                                                    |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **User-supplied subject function**    | `Subject = (question: string) => Promise<AnswerResult>`                                                                                  | The library never imports a user's stack. The user wraps their own pipeline in a closure; the harness orchestrates. Keeps `eval-pack` zero-knowledge about retrieval, models, vector stores. |
+| **Pluggable citation extractor**      | `CitationExtractor = (text: string) => string[]`                                                                                         | `ask-zeroindex` uses `[chunk:N]` markers; other projects use `[doc:url]`, structured tool calls, or no citations at all. Ship `markerCitationExtractor(regex)` + `noopCitationExtractor`.    |
+| **Composable check pipeline**         | Each check is `(item, result) => CheckResult`                                                                                            | The 4 built-ins cover the current consumer. Users add custom checks by writing functions. No DSL, no config file.                                                                            |
+| **Pass rule overridable**             | Default rule matches `ask-zeroindex`'s current logic; users pass `passRule: (Result) => boolean` to override                             | Avoids hardcoding the `programmatic && judge.appropriate==='yes'` shape.                                                                                                                     |
+| **Pluggable judge interface**         | `Judge = { name, run: (item, result) => Promise<Judgment> }`                                                                             | The judge is an LLM call; doesn't belong baked into `runEval`. Ship `claudeJudge({model})`; future `openaiJudge()` slots into the same interface.                                            |
+| **Throttle handling at the runner**   | `throttleMs` config, sleep between items                                                                                                 | Voyage free tier (3 RPM) was the actual constraint on `ask-zeroindex`'s eval; rather than make every subject re-invent throttling, do it once at the orchestrator.                           |
+| **Per-item error tolerance**          | If a single item throws, log and continue; aggregate pass-rate uses only successful items; runner exits non-zero if zero items succeeded | Matches `ask-zeroindex/evals/run.ts` behavior. A flaky network call shouldn't kill the run.                                                                                                  |
+| **Threshold gating in CLI, not core** | `runEval()` returns results; CLI checks threshold and sets exit code                                                                     | Library users may want to do their own thresholding (e.g., per-category). Keeps the core API a pure function.                                                                                |
+| **Results JSON shape**                | `{ model, ran, results: Result[] }` — matches existing `ask-zeroindex` format                                                            | Backwards-compatible with existing baseline files; no migration needed for historical comparison.                                                                                            |
 
 ### Resolved open questions (picks committed 2026-05-12)
 
 These were called out in the plan as needing user input; resolutions captured here so the reasoning is durable.
 
-| Question | Pick | Reasoning |
-|---|---|---|
-| Single package vs 5-package monorepo | **Single package with subpath exports** | The 5-package split is artificial for this product (see "Things deliberately NOT chosen"). Subpath exports give the same import clarity. |
-| `evals.zeroindex.ai` infra | **Cloudflare Workers Static Assets**, same pattern as `zeroindex.ai` | New public repo `zeroindex-ai/evals-site` with auto-deploy. CI commits the HTML artifact; the static site serves it. Zero new infra to learn. R2 + signed URLs is the right answer at 10× scale and is not needed yet. |
-| Full answer text in HTML report? | **Yes, full** | v0.1's only public consumer (`ask-zeroindex`) answers questions about ZeroIndex itself — nothing sensitive. Optional `redact?: (item, result) => Result` hook on the renderer keeps the door open; ship empty. |
-| Schema migration in `ask-zeroindex` | **Hand-edit `golden-seed.json`** | 30 items, ~5 minutes, eyeballs every entry once. Codemod is busywork at this scale. |
-| License | **MIT** | Matches `mcp-pack`. No bifurcation without reason. |
+| Question                             | Pick                                                                 | Reasoning                                                                                                                                                                                                              |
+| ------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Single package vs 5-package monorepo | **Single package with subpath exports**                              | The 5-package split is artificial for this product (see "Things deliberately NOT chosen"). Subpath exports give the same import clarity.                                                                               |
+| `evals.zeroindex.ai` infra           | **Cloudflare Workers Static Assets**, same pattern as `zeroindex.ai` | New public repo `zeroindex-ai/evals-site` with auto-deploy. CI commits the HTML artifact; the static site serves it. Zero new infra to learn. R2 + signed URLs is the right answer at 10× scale and is not needed yet. |
+| Full answer text in HTML report?     | **Yes, full**                                                        | v0.1's only public consumer (`ask-zeroindex`) answers questions about ZeroIndex itself — nothing sensitive. Optional `redact?: (item, result) => Result` hook on the renderer keeps the door open; ship empty.         |
+| Schema migration in `ask-zeroindex`  | **Hand-edit `golden-seed.json`**                                     | 30 items, ~5 minutes, eyeballs every entry once. Codemod is busywork at this scale.                                                                                                                                    |
+| License                              | **MIT**                                                              | Matches `mcp-pack`. No bifurcation without reason.                                                                                                                                                                     |
 
 ---
 
@@ -198,9 +198,9 @@ Result { id, category, question, text, retrievedRefs, citationRefs,
 ```ts
 export type GoldenItem = {
   id: string;
-  category: string;                   // free-form; user picks axes
+  category: string; // free-form; user picks axes
   question: string;
-  relevant_refs?: string[];           // opaque refs (chunk ids, doc URIs, tool names)
+  relevant_refs?: string[]; // opaque refs (chunk ids, doc URIs, tool names)
   must_mention?: string[];
   must_not_mention?: string[];
   expect_refusal?: boolean;
@@ -215,7 +215,7 @@ export type GoldenSet = {
 
 export type AnswerResult = {
   text: string;
-  retrievedRefs?: string[];           // what your retriever returned, if RAG
+  retrievedRefs?: string[]; // what your retriever returned, if RAG
   metadata?: Record<string, unknown>; // anywhere to stash timings, tool calls, etc.
 };
 
@@ -249,9 +249,9 @@ export type Result = {
   text: string;
   retrievedRefs: string[];
   citationRefs: string[];
-  recallAtK: number | null;           // null if relevant_refs absent
+  recallAtK: number | null; // null if relevant_refs absent
   checks: CheckResult[];
-  judgment: Judgment | null;          // null if no judge configured
+  judgment: Judgment | null; // null if no judge configured
   pass: boolean;
   timings: { retrievalMs?: number; firstTokenMs?: number; totalMs: number };
   metadata: Record<string, unknown>;
@@ -268,7 +268,7 @@ import { markerCitationExtractor } from '@zeroindex-ai/eval-pack';
 const subject: Subject = async (question) => {
   const chunks = await hybridSearch(question);
   const text = await streamAnswer(question, chunks);
-  return { text, retrievedRefs: chunks.map(c => String(c.id)) };
+  return { text, retrievedRefs: chunks.map((c) => String(c.id)) };
 };
 
 const results = await runEval({
@@ -278,7 +278,7 @@ const results = await runEval({
   checks: [
     mustMention(),
     mustNotMention(),
-    citationCount({ min: 1, skipWhen: item => item.expect_refusal === true }),
+    citationCount({ min: 1, skipWhen: (item) => item.expect_refusal === true }),
   ],
   judge: claudeJudge({ model: 'claude-sonnet-4-6' }),
   throttleMs: Number(process.env.EVAL_THROTTLE_MS ?? 0),
@@ -289,12 +289,12 @@ const results = await runEval({
 
 ### Built-in checks (v0.1)
 
-| Check | Reads from item | Logic |
-|---|---|---|
-| `mustMention(opts?)` | `item.must_mention` | Case-insensitive substring on every term; ok if all present |
-| `mustNotMention(opts?)` | `item.must_not_mention` | Case-insensitive substring on every term; ok if none present |
-| `citationCount({ min, skipWhen? })` | `result.citationRefs.length` | `count >= min`; auto-skip if `skipWhen(item) === true` |
-| `expectRefusal()` | `item.expect_refusal` | Heuristic refusal detection (configurable phrase list); ok if `expected === actual` |
+| Check                               | Reads from item              | Logic                                                                               |
+| ----------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| `mustMention(opts?)`                | `item.must_mention`          | Case-insensitive substring on every term; ok if all present                         |
+| `mustNotMention(opts?)`             | `item.must_not_mention`      | Case-insensitive substring on every term; ok if none present                        |
+| `citationCount({ min, skipWhen? })` | `result.citationRefs.length` | `count >= min`; auto-skip if `skipWhen(item) === true`                              |
+| `expectRefusal()`                   | `item.expect_refusal`        | Heuristic refusal detection (configurable phrase list); ok if `expected === actual` |
 
 ### CLI surface
 
@@ -514,7 +514,7 @@ Automated as of 0.2.0 via `.github/workflows/release.yml`:
 5. `git push --tags`.
 6. The workflow runs: `pnpm install --frozen-lockfile`, `pnpm build`,
    `pnpm test`, version-tag-match check, `npm publish --provenance
-   --access public`, and `gh release create`. Required repo secret:
+--access public`, and `gh release create`. Required repo secret:
    `NPM_TOKEN` (an "Automation" token from npmjs.org with publish scope).
 
 **Manual fallback** — if the workflow needs to be bypassed: confirm green CI
@@ -525,16 +525,16 @@ authenticated npm session.
 
 ## 11. Decision log (running)
 
-| Date | Decision | Why |
-|---|---|---|
-| 2026-05-12 | Single-package monorepo, not 5-package | Dep graph is artificial here; pieces always ship together. Different from `mcp-pack` where vendor APIs are genuinely independent. |
-| 2026-05-12 | Claude judge only in v0.1; AI SDK adapter deferred | Adapter design needs a second provider to validate against. Premature otherwise. |
-| 2026-05-12 | RAG-first; agent primitives in v0.2 | Allows v0.1 to be a clean lift-and-shift from `ask-zeroindex`. Agent shapes get designed against `repo-xray`'s real needs. |
-| 2026-05-12 | Standalone HTML report, no live dashboard | Live dashboards are `trace-pack`'s territory. eval-pack outputs files. |
-| 2026-05-12 | Cloudflare Workers Static Assets for `evals.zeroindex.ai` | Same pattern as `zeroindex.ai`. R2 deferred until scale demands it. |
-| 2026-05-12 | Full answer text in HTML report; redaction hook stubbed | Only public consumer (`ask-zeroindex`) is non-sensitive. Premature redaction layers rot. |
-| 2026-05-12 | Hand-edit `golden-seed.json` schema migration | 30 items, ~5 min, eyeballs every entry once. |
-| 2026-05-12 | MIT license | Matches `mcp-pack`. No bifurcation without reason. |
+| Date       | Decision                                                  | Why                                                                                                                               |
+| ---------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-05-12 | Single-package monorepo, not 5-package                    | Dep graph is artificial here; pieces always ship together. Different from `mcp-pack` where vendor APIs are genuinely independent. |
+| 2026-05-12 | Claude judge only in v0.1; AI SDK adapter deferred        | Adapter design needs a second provider to validate against. Premature otherwise.                                                  |
+| 2026-05-12 | RAG-first; agent primitives in v0.2                       | Allows v0.1 to be a clean lift-and-shift from `ask-zeroindex`. Agent shapes get designed against `repo-xray`'s real needs.        |
+| 2026-05-12 | Standalone HTML report, no live dashboard                 | Live dashboards are `trace-pack`'s territory. eval-pack outputs files.                                                            |
+| 2026-05-12 | Cloudflare Workers Static Assets for `evals.zeroindex.ai` | Same pattern as `zeroindex.ai`. R2 deferred until scale demands it.                                                               |
+| 2026-05-12 | Full answer text in HTML report; redaction hook stubbed   | Only public consumer (`ask-zeroindex`) is non-sensitive. Premature redaction layers rot.                                          |
+| 2026-05-12 | Hand-edit `golden-seed.json` schema migration             | 30 items, ~5 min, eyeballs every entry once.                                                                                      |
+| 2026-05-12 | MIT license                                               | Matches `mcp-pack`. No bifurcation without reason.                                                                                |
 
 ---
 
@@ -575,4 +575,4 @@ authenticated npm session.
 
 ---
 
-*This document is a living artifact. Update it when scope, contracts, or decisions change materially.*
+_This document is a living artifact. Update it when scope, contracts, or decisions change materially._

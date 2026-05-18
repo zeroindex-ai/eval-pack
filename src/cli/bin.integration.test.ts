@@ -99,7 +99,7 @@ describe('CLI integration — dist/cli/bin.js', () => {
   it('runs a dummy subject with --judge none and exits 0', async () => {
     if (!(await distBuilt())) {
       console.log(
-        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`,
+        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`
       );
       return;
     }
@@ -112,16 +112,8 @@ describe('CLI integration — dist/cli/bin.js', () => {
       await writeFile(goldenPath, JSON.stringify(DUMMY_GOLDEN), 'utf-8');
 
       const { code, stdout, stderr } = await runCli(
-        [
-          'run',
-          '--subject',
-          subjectPath,
-          '--golden',
-          goldenPath,
-          '--judge',
-          'none',
-        ],
-        dir,
+        ['run', '--subject', subjectPath, '--golden', goldenPath, '--judge', 'none'],
+        dir
       );
 
       expect(code, `stderr was:\n${stderr}\nstdout was:\n${stdout}`).toBe(0);
@@ -143,17 +135,14 @@ describe('CLI integration — dist/cli/bin.js', () => {
   it('exits 2 on usage error (unknown flag)', async () => {
     if (!(await distBuilt())) {
       console.log(
-        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`,
+        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`
       );
       return;
     }
 
     const dir = await mkdtemp(join(tmpdir(), 'eval-pack-cli-'));
     try {
-      const { code, stderr } = await runCli(
-        ['run', '--not-a-real-flag', 'x'],
-        dir,
-      );
+      const { code, stderr } = await runCli(['run', '--not-a-real-flag', 'x'], dir);
       expect(code).toBe(2);
       expect(stderr).toMatch(/Usage error|Unknown flag/);
     } finally {

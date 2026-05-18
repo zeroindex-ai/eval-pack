@@ -71,8 +71,7 @@ export type RunReport = {
   jsonPath?: string;
 };
 
-const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function loadGolden(source: string | GoldenSet): Promise<GoldenSet> {
   if (typeof source !== 'string') return source;
@@ -102,7 +101,7 @@ async function runOne(
   citationExtractor: CitationExtractor,
   checks: Check[],
   judge: Judge | undefined,
-  passRule: PassRule,
+  passRule: PassRule
 ): Promise<Result> {
   const t0 = Date.now();
   const ans = await subject(item.question);
@@ -111,9 +110,7 @@ async function runOne(
   const retrievedRefs = ans.retrievedRefs ?? [];
   const citationRefs = citationExtractor(ans.text);
   const recall =
-    item.relevant_refs && item.relevant_refs.length > 0
-      ? recallAtK(retrievedRefs, item.relevant_refs)
-      : null;
+    item.relevant_refs && item.relevant_refs.length > 0 ? recallAtK(retrievedRefs, item.relevant_refs) : null;
 
   const partial: PartialResult = {
     id: item.id,

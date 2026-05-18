@@ -41,17 +41,15 @@ describe('buildPrompt', () => {
   });
 
   it('reports citation count from result.citationRefs.length', () => {
-    expect(buildPrompt(makeItem(), makeResult({ citationRefs: [] }), '')).toContain(
-      'Citation count: 0',
+    expect(buildPrompt(makeItem(), makeResult({ citationRefs: [] }), '')).toContain('Citation count: 0');
+    expect(buildPrompt(makeItem(), makeResult({ citationRefs: ['a', 'b', 'c'] }), '')).toContain(
+      'Citation count: 3'
     );
-    expect(
-      buildPrompt(makeItem(), makeResult({ citationRefs: ['a', 'b', 'c'] }), ''),
-    ).toContain('Citation count: 3');
   });
 
   it('renders expect_refusal: true when set; false when omitted', () => {
     expect(buildPrompt(makeItem({ expect_refusal: true }), makeResult(), '')).toContain(
-      'Expect refusal: true',
+      'Expect refusal: true'
     );
     expect(buildPrompt(makeItem(), makeResult(), '')).toContain('Expect refusal: false');
   });

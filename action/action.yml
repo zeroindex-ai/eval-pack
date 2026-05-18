@@ -21,19 +21,19 @@ inputs:
   threshold:
     description: Pass-rate threshold in [0,1]. When the run falls below, the action fails. Omit to skip gating.
     required: false
-    default: ""
+    default: ''
   filter:
     description: 'Filter spec, e.g. "category=positive". Pass multiple via newlines.'
     required: false
-    default: ""
+    default: ''
   limit:
     description: Maximum number of items to run
     required: false
-    default: ""
+    default: ''
   throttle-ms:
     description: Sleep between items in ms (vendor rate-limit hedging)
     required: false
-    default: ""
+    default: ''
   results-dir:
     description: Where to write the run-<timestamp>.json
     required: false
@@ -41,19 +41,19 @@ inputs:
   html-out:
     description: Path to write the standalone HTML report. Omit to skip.
     required: false
-    default: ""
+    default: ''
   node-version:
     description: Node.js version to install
     required: false
-    default: "24"
+    default: '24'
   install:
     description: 'Run `pnpm install --frozen-lockfile` first. Set to "false" to assume deps are already installed.'
     required: false
-    default: "true"
+    default: 'true'
   upload-artifacts:
     description: Upload results-dir and html-out as workflow artifacts (always, even on failure)
     required: false
-    default: "true"
+    default: 'true'
   artifact-name:
     description: Workflow-artifact name for the uploaded results
     required: false

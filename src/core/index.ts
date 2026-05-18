@@ -34,10 +34,4 @@ export { markerCitationExtractor, noopCitationExtractor } from './citations.js';
 
 export { defaultPassRule, byCategory, type PassRule } from './passRule.js';
 
-export {
-  runEval,
-  type ItemEvent,
-  type RunFilter,
-  type RunOptions,
-  type RunReport,
-} from './runner.js';
+export { runEval, type ItemEvent, type RunFilter, type RunOptions, type RunReport } from './runner.js';

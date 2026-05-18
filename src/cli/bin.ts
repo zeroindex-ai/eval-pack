@@ -5,13 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { runEval, type RunFilter } from '../core/runner.js';
 import { renderHtml } from '../report-html/index.js';
 import type { Judge, Subject } from '../core/schema.js';
-import {
-  HELP,
-  UsageError,
-  parseArgs,
-  resolveThreshold,
-  resolveThrottleMs,
-} from './parseArgs.js';
+import { HELP, UsageError, parseArgs, resolveThreshold, resolveThrottleMs } from './parseArgs.js';
 import { printSummary } from './stdoutPrinter.js';
 
 async function loadSubject(path: string): Promise<Subject> {
@@ -21,7 +15,7 @@ async function loadSubject(path: string): Promise<Subject> {
   if (typeof subject !== 'function') {
     throw new Error(
       `Subject file ${path} must export a 'subject' function or default. ` +
-        `For TypeScript subjects, invoke via 'tsx eval-pack run ...' or pre-compile to JS.`,
+        `For TypeScript subjects, invoke via 'tsx eval-pack run ...' or pre-compile to JS.`
     );
   }
   return subject as Subject;
@@ -90,8 +84,7 @@ async function main(): Promise<void> {
       : (e) => {
           if (e.type === 'pass') process.stdout.write(`  ✓ ${e.result.id}\n`);
           else if (e.type === 'fail') process.stdout.write(`  ✗ ${e.result.id}\n`);
-          else if (e.type === 'error')
-            process.stdout.write(`  ! ${e.item.id}: ${e.error.message}\n`);
+          else if (e.type === 'error') process.stdout.write(`  ! ${e.item.id}: ${e.error.message}\n`);
         },
   });
 
@@ -111,7 +104,7 @@ async function main(): Promise<void> {
     const passRate = report.results.filter((r) => r.pass).length / report.results.length;
     if (passRate < threshold) {
       console.error(
-        `Pass rate ${(passRate * 100).toFixed(1)}% below threshold ${(threshold * 100).toFixed(0)}%`,
+        `Pass rate ${(passRate * 100).toFixed(1)}% below threshold ${(threshold * 100).toFixed(0)}%`
       );
       process.exit(1);
     }

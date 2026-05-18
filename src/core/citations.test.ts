@@ -20,10 +20,7 @@ describe('markerCitationExtractor', () => {
 
   it('works with a non-numeric pattern (e.g. doc URIs)', () => {
     const extract = markerCitationExtractor(/\[doc:([a-z0-9-]+)\]/g);
-    expect(extract('See [doc:intro] and [doc:pricing-v2].')).toEqual([
-      'intro',
-      'pricing-v2',
-    ]);
+    expect(extract('See [doc:intro] and [doc:pricing-v2].')).toEqual(['intro', 'pricing-v2']);
   });
 
   it('preserves first-encounter order', () => {

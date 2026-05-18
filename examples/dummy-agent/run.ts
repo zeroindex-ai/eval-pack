@@ -7,12 +7,7 @@
 //   import { runEval, mustMention, mustNotMention, expectRefusal } from '@zeroindex-ai/eval-pack';
 
 import { join } from 'node:path';
-import {
-  runEval,
-  mustMention,
-  mustNotMention,
-  expectRefusal,
-} from '../../src/core/index.js';
+import { runEval, mustMention, mustNotMention, expectRefusal } from '../../src/core/index.js';
 import { subject } from './subject.js';
 
 async function main(): Promise<void> {

@@ -27,12 +27,7 @@ function captureClient(responseText: string): {
   }> = [];
   const client = {
     messages: {
-      create: async (params: {
-        model: string;
-        max_tokens: number;
-        system: string;
-        messages: unknown;
-      }) => {
+      create: async (params: { model: string; max_tokens: number; system: string; messages: unknown }) => {
         calls.push(params);
         return { content: [{ type: 'text', text: responseText }] };
       },
@@ -72,9 +67,7 @@ describe('claudeJudge factory', () => {
   });
 
   it('respects a custom model in name and in the API call', async () => {
-    const { client, calls } = captureClient(
-      '{"appropriate":"yes","grounded":"yes","reason":"ok"}',
-    );
+    const { client, calls } = captureClient('{"appropriate":"yes","grounded":"yes","reason":"ok"}');
     const judge = claudeJudge({ client, model: 'claude-haiku-4-5-20251001' });
     expect(judge.name).toContain('claude-haiku-4-5-20251001');
     await judge.run(item, result);
@@ -82,25 +75,19 @@ describe('claudeJudge factory', () => {
   });
 
   it('passes the system prompt through to the API', async () => {
-    const { client, calls } = captureClient(
-      '{"appropriate":"yes","grounded":"yes","reason":"ok"}',
-    );
+    const { client, calls } = captureClient('{"appropriate":"yes","grounded":"yes","reason":"ok"}');
     await claudeJudge({ client, system: 'CUSTOM SYSTEM' }).run(item, result);
     expect(calls[0]!.system).toBe('CUSTOM SYSTEM');
   });
 
   it('respects custom maxTokens', async () => {
-    const { client, calls } = captureClient(
-      '{"appropriate":"yes","grounded":"yes","reason":"ok"}',
-    );
+    const { client, calls } = captureClient('{"appropriate":"yes","grounded":"yes","reason":"ok"}');
     await claudeJudge({ client, maxTokens: 50 }).run(item, result);
     expect(calls[0]!.max_tokens).toBe(50);
   });
 
   it('includes the category guidance in the user prompt', async () => {
-    const { client, calls } = captureClient(
-      '{"appropriate":"yes","grounded":"yes","reason":"ok"}',
-    );
+    const { client, calls } = captureClient('{"appropriate":"yes","grounded":"yes","reason":"ok"}');
     await claudeJudge({
       client,
       categoryGuidance: 'GUIDE: be strict',

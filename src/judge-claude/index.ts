@@ -32,8 +32,7 @@ export function claudeJudge(opts: ClaudeJudgeOpts = {}): Judge {
   const maxTokens = opts.maxTokens ?? DEFAULT_MAX_TOKENS;
   const system = opts.system ?? DEFAULT_SYSTEM;
   const categoryGuidance = opts.categoryGuidance ?? DEFAULT_CATEGORY_GUIDANCE;
-  const client =
-    opts.client ?? new Anthropic(opts.apiKey !== undefined ? { apiKey: opts.apiKey } : {});
+  const client = opts.client ?? new Anthropic(opts.apiKey !== undefined ? { apiKey: opts.apiKey } : {});
 
   return {
     name: `claude-judge(${model})`,

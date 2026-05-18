@@ -35,7 +35,7 @@ describe('GoldenItemSchema', () => {
         category: 'positive',
         question: 'what?',
         relevant_refs: [1, 2],
-      }),
+      })
     ).toThrow();
   });
 });
@@ -62,9 +62,7 @@ describe('GoldenSetSchema', () => {
   });
 
   it('rejects a set missing the version wrapper', () => {
-    expect(() =>
-      GoldenSetSchema.parse([{ id: 'q1', category: 'positive', question: 'what?' }]),
-    ).toThrow();
+    expect(() => GoldenSetSchema.parse([{ id: 'q1', category: 'positive', question: 'what?' }])).toThrow();
   });
 });
 
@@ -84,12 +82,8 @@ describe('JudgmentSchema', () => {
   });
 
   it('rejects unknown enum values', () => {
-    expect(() =>
-      JudgmentSchema.parse({ appropriate: 'maybe', grounded: 'yes', reason: 'x' }),
-    ).toThrow();
-    expect(() =>
-      JudgmentSchema.parse({ appropriate: 'yes', grounded: 'unsure', reason: 'x' }),
-    ).toThrow();
+    expect(() => JudgmentSchema.parse({ appropriate: 'maybe', grounded: 'yes', reason: 'x' })).toThrow();
+    expect(() => JudgmentSchema.parse({ appropriate: 'yes', grounded: 'unsure', reason: 'x' })).toThrow();
   });
 
   it('rejects missing fields', () => {

@@ -16,9 +16,7 @@ export function parseJudgeResponse(text: string): Judgment {
   try {
     parsed = JSON.parse(cleaned);
   } catch {
-    throw new Error(
-      `Judge response was not valid JSON: ${cleaned.slice(0, 200)}`,
-    );
+    throw new Error(`Judge response was not valid JSON: ${cleaned.slice(0, 200)}`);
   }
 
   return JudgmentSchema.parse(parsed);

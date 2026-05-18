@@ -30,8 +30,8 @@ describe('defaultPassRule', () => {
             { name: 'b', ok: true },
           ],
           judgment: null,
-        }),
-      ),
+        })
+      )
     ).toBe(true);
   });
 
@@ -44,8 +44,8 @@ describe('defaultPassRule', () => {
             { name: 'b', ok: false },
           ],
           judgment: null,
-        }),
-      ),
+        })
+      )
     ).toBe(false);
   });
 
@@ -55,8 +55,8 @@ describe('defaultPassRule', () => {
         makeResult({
           checks: [{ name: 'a', ok: true }],
           judgment: { appropriate: 'yes', grounded: 'yes', reason: '' },
-        }),
-      ),
+        })
+      )
     ).toBe(true);
   });
 
@@ -66,8 +66,8 @@ describe('defaultPassRule', () => {
         makeResult({
           checks: [],
           judgment: { appropriate: 'yes', grounded: 'na', reason: 'refusal correct' },
-        }),
-      ),
+        })
+      )
     ).toBe(true);
   });
 
@@ -77,8 +77,8 @@ describe('defaultPassRule', () => {
         makeResult({
           checks: [],
           judgment: { appropriate: 'no', grounded: 'yes', reason: '' },
-        }),
-      ),
+        })
+      )
     ).toBe(false);
   });
 
@@ -88,8 +88,8 @@ describe('defaultPassRule', () => {
         makeResult({
           checks: [],
           judgment: { appropriate: 'partial', grounded: 'yes', reason: '' },
-        }),
-      ),
+        })
+      )
     ).toBe(false);
   });
 
@@ -99,8 +99,8 @@ describe('defaultPassRule', () => {
         makeResult({
           checks: [],
           judgment: { appropriate: 'yes', grounded: 'no', reason: '' },
-        }),
-      ),
+        })
+      )
     ).toBe(false);
   });
 

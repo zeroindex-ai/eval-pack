@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  mustMention,
-  mustNotMention,
-  citationCount,
-  expectRefusal,
-} from './checks.js';
+import { mustMention, mustNotMention, citationCount, expectRefusal } from './checks.js';
 import type { GoldenItem, PartialResult } from './schema.js';
 
 function makeResult(overrides: Partial<PartialResult> = {}): PartialResult {
@@ -99,19 +94,13 @@ describe('mustNotMention', () => {
 
 describe('citationCount', () => {
   it('passes when citationRefs length >= min', () => {
-    const out = citationCount({ min: 1 })(
-      makeItem(),
-      makeResult({ citationRefs: ['c1', 'c2'] }),
-    );
+    const out = citationCount({ min: 1 })(makeItem(), makeResult({ citationRefs: ['c1', 'c2'] }));
     expect(out.ok).toBe(true);
     expect(out.detail).toEqual({ count: 2, min: 1 });
   });
 
   it('fails when citationRefs length < min', () => {
-    const out = citationCount({ min: 2 })(
-      makeItem(),
-      makeResult({ citationRefs: ['c1'] }),
-    );
+    const out = citationCount({ min: 2 })(makeItem(), makeResult({ citationRefs: ['c1'] }));
     expect(out.ok).toBe(false);
     expect(out.detail).toEqual({ count: 1, min: 2 });
   });

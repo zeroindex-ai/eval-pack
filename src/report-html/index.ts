@@ -1,12 +1,7 @@
 import type { Result } from '../core/schema.js';
 import type { RunReport } from '../core/runner.js';
 import { STYLES } from './styles.js';
-import {
-  escape,
-  renderCategoryTable,
-  renderFailureCard,
-  renderPassRow,
-} from './template.js';
+import { escape, renderCategoryTable, renderFailureCard, renderPassRow } from './template.js';
 
 export type RenderOptions = {
   /** Project name shown in the report title. Default: "Eval results". */
@@ -34,9 +29,7 @@ export function renderHtml(report: RunReport, opts: RenderOptions = {}): string 
   const passPct = (passRate * 100).toFixed(1);
   const meetsThreshold = opts.threshold === undefined ? true : passRate >= opts.threshold;
   const thresholdLabel =
-    opts.threshold !== undefined
-      ? `<small>/ threshold ${(opts.threshold * 100).toFixed(0)}%</small>`
-      : '';
+    opts.threshold !== undefined ? `<small>/ threshold ${(opts.threshold * 100).toFixed(0)}%</small>` : '';
   const failures = results.filter((r) => !r.pass);
   const passing = results.filter((r) => r.pass);
 
@@ -72,7 +65,7 @@ export function renderHtml(report: RunReport, opts: RenderOptions = {}): string 
             ${report.errors
               .map(
                 (e) =>
-                  `<tr><td><code>${escape(e.id)}</code></td><td><code>${escape(e.error)}</code></td></tr>`,
+                  `<tr><td><code>${escape(e.id)}</code></td><td><code>${escape(e.error)}</code></td></tr>`
               )
               .join('\n')}
           </tbody>

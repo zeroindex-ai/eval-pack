@@ -153,15 +153,13 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
  */
 export function resolveThreshold(
   cliValue: number | undefined,
-  envValue: string | undefined,
+  envValue: string | undefined
 ): number | undefined {
   if (cliValue !== undefined) return cliValue;
   if (envValue === undefined) return undefined;
   const n = Number(envValue);
   if (!Number.isFinite(n) || n < 0 || n > 1) {
-    throw new UsageError(
-      `EVAL_PASS_THRESHOLD must be a number in [0,1], got ${envValue}`,
-    );
+    throw new UsageError(`EVAL_PASS_THRESHOLD must be a number in [0,1], got ${envValue}`);
   }
   return n;
 }
@@ -172,17 +170,12 @@ export function resolveThreshold(
  * 0 when neither is set. Throws `UsageError` for non-finite or negative env
  * values.
  */
-export function resolveThrottleMs(
-  cliValue: number | undefined,
-  envValue: string | undefined,
-): number {
+export function resolveThrottleMs(cliValue: number | undefined, envValue: string | undefined): number {
   if (cliValue !== undefined) return cliValue;
   if (envValue === undefined) return 0;
   const n = Number(envValue);
   if (!Number.isFinite(n) || n < 0) {
-    throw new UsageError(
-      `EVAL_THROTTLE_MS must be a non-negative number, got ${envValue}`,
-    );
+    throw new UsageError(`EVAL_THROTTLE_MS must be a non-negative number, got ${envValue}`);
   }
   return n;
 }

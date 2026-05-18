@@ -53,7 +53,7 @@ describe('printSummary', () => {
           makeResult({ id: 'c', category: 'negative', pass: true }),
         ],
       }),
-      undefined,
+      undefined
     );
     const text = logs.join('\n');
     expect(text).toContain('Pass rate by category');
@@ -87,7 +87,7 @@ describe('printSummary', () => {
           }),
         ],
       }),
-      undefined,
+      undefined
     );
     const text = logs.join('\n');
     expect(text).toContain('Failures (1)');
@@ -97,20 +97,14 @@ describe('printSummary', () => {
   });
 
   it('prints errors section when present', () => {
-    printSummary(
-      makeReport({ errors: [{ id: 'boom', error: 'fetch failed' }] }),
-      undefined,
-    );
+    printSummary(makeReport({ errors: [{ id: 'boom', error: 'fetch failed' }] }), undefined);
     expect(logs.join('\n')).toContain('Errors (1)');
     expect(logs.join('\n')).toContain('boom');
     expect(logs.join('\n')).toContain('fetch failed');
   });
 
   it('prints saved JSON path when persisted', () => {
-    printSummary(
-      makeReport({ jsonPath: 'evals/results/run-foo.json' }),
-      undefined,
-    );
+    printSummary(makeReport({ jsonPath: 'evals/results/run-foo.json' }), undefined);
     expect(logs.join('\n')).toContain('Saved: evals/results/run-foo.json');
   });
 

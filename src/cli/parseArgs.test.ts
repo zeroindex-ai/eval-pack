@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  parseArgs,
-  resolveThreshold,
-  resolveThrottleMs,
-  UsageError,
-} from './parseArgs.js';
+import { parseArgs, resolveThreshold, resolveThrottleMs, UsageError } from './parseArgs.js';
 
 describe('parseArgs — basics', () => {
   it('returns defaults on empty argv', () => {
@@ -94,12 +89,7 @@ describe('parseArgs — validation', () => {
   });
 
   it('repeated --filter accumulates into the filter record', () => {
-    const out = parseArgs([
-      '--filter',
-      'category=positive',
-      '--filter',
-      'tags=core,smoke',
-    ]);
+    const out = parseArgs(['--filter', 'category=positive', '--filter', 'tags=core,smoke']);
     expect(out.filter).toEqual({ category: 'positive', tags: 'core,smoke' });
   });
 });
@@ -122,7 +112,7 @@ describe('resolveThreshold — env-var fallback', () => {
   it('throws UsageError on non-numeric env value', () => {
     expect(() => resolveThreshold(undefined, 'abc')).toThrow(UsageError);
     expect(() => resolveThreshold(undefined, 'abc')).toThrow(
-      /EVAL_PASS_THRESHOLD must be a number in \[0,1\]/,
+      /EVAL_PASS_THRESHOLD must be a number in \[0,1\]/
     );
   });
 
@@ -157,7 +147,7 @@ describe('resolveThrottleMs — env-var fallback', () => {
   it('throws UsageError on non-numeric env value', () => {
     expect(() => resolveThrottleMs(undefined, 'abc')).toThrow(UsageError);
     expect(() => resolveThrottleMs(undefined, 'abc')).toThrow(
-      /EVAL_THROTTLE_MS must be a non-negative number/,
+      /EVAL_THROTTLE_MS must be a non-negative number/
     );
   });
 
