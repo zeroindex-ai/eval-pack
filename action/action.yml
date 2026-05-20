@@ -23,7 +23,7 @@ inputs:
     required: false
     default: ''
   filter:
-    description: 'Filter spec, e.g. "category=positive". Pass multiple via newlines.'
+    description: 'Filter spec, e.g. "category=positive". Pass multiple keys via newlines (e.g. category and tags); keys are independent and repeating the same key overwrites the earlier value.'
     required: false
     default: ''
   limit:

@@ -1,5 +1,10 @@
 // Eval metrics: set-recall for retrieval ablation and percentile (p50/p95)
 // for latency aggregation. Pure functions, no dependencies.
+//
+// NOTE: percentile/p50/p95 are exported as utilities for consumers to
+// aggregate latency themselves; they are NOT computed by the runner or
+// surfaced in the default stdout summary or HTML report (which report
+// per-item `totalMs`). recall is likewise a standalone helper.
 
 /**
  * Set-recall over the entire retrieved set: |relevant ∩ retrieved| / |relevant|.
