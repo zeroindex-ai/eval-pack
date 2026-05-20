@@ -204,6 +204,19 @@ describe('renderHtml — redact hook', () => {
   });
 });
 
+describe('renderHtml — footer', () => {
+  it('stamps the eval-pack version into the footer (PROJECT.md §6)', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { fileURLToPath } = await import('node:url');
+    const pkg = JSON.parse(
+      readFileSync(fileURLToPath(new URL('../../package.json', import.meta.url)), 'utf8')
+    ) as { version: string };
+    const out = renderHtml(makeReport());
+    expect(out).toContain('@zeroindex-ai/eval-pack');
+    expect(out).toContain(`v${pkg.version}`);
+  });
+});
+
 describe('renderHtml — judge metadata', () => {
   it('shows judgeName in the header when set', () => {
     const out = renderHtml(makeReport({ judgeName: 'claude-judge(claude-sonnet-4-6)' }));

@@ -185,8 +185,9 @@ export const HELP = `Usage: eval-pack run [options]
 Options:
   --golden <path>          Path to golden JSON (default: evals/golden.json)
   --subject <path>         JS file exporting a 'subject' function (required).
-                           For TypeScript subjects, invoke the CLI via
-                           'tsx eval-pack run ...' or pre-compile to JS.
+                           For TypeScript subjects, run the CLI under tsx:
+                           'tsx node_modules/.bin/eval-pack run ...'
+                           (or pre-compile to JS).
   --judge <name>           "claude" or "none" (default: claude)
   --judge-model <id>       Override judge model (default: claude-sonnet-4-6)
   --threshold <ratio>      Pass-rate threshold 0–1 (default: env EVAL_PASS_THRESHOLD or none)

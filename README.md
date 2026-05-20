@@ -139,7 +139,7 @@ Exit codes: `0` pass, `1` below threshold, `2` usage error, `3` every item error
 
 `--threshold` and `--throttle-ms` fall back to `EVAL_PASS_THRESHOLD` and `EVAL_THROTTLE_MS` env vars when not set on the CLI.
 
-TypeScript subject files require invoking the CLI via `pnpm tsx eval-pack run ...` or pre-compiling to JS. Bundling `tsx` is a v0.2 candidate.
+TypeScript subject files require running the CLI under `tsx`. The published `bin` has a `node` shebang, so point `tsx` at the bin script directly: `pnpm exec tsx node_modules/.bin/eval-pack run ...` (this is exactly what the GitHub composite action does). Or pre-compile your subject to JS. Bundling `tsx` is a v0.2 candidate.
 
 ## GitHub composite action
 
