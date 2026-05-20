@@ -108,7 +108,7 @@ Only `id`, `category`, and `question` are required. `category` is free-form — 
 | `mustMention(opts?)`                | Every term in `item.must_mention` appears in the answer (case-insensitive by default; set `caseSensitive: true` for exact)                   |
 | `mustNotMention(opts?)`             | No term in `item.must_not_mention` appears                                                                                                   |
 | `citationCount({ min, skipWhen? })` | `result.citationRefs.length >= min`, with optional auto-skip for refusal items                                                               |
-| `expectRefusal({ phrases? })`       | Heuristic refusal detection. Passes when `item.expect_refusal === (actual refusal detected)`. Auto-skips items without `expect_refusal` set. |
+| `expectRefusal({ phrases? })`       | Heuristic refusal detection. Passes when `item.expect_refusal === (actual refusal detected)`. Auto-skips items without `expect_refusal` set. Coarse, English-only case-insensitive substring match — can false-positive (e.g. "I don't know why…") and miss non-English refusals; override `phrases` to adjust. |
 
 Custom checks are functions with the shape `(item: GoldenItem, partial: PartialResult) => CheckResult`. No DSL, no plugin registration — just write a function and pass it.
 
@@ -123,7 +123,9 @@ Options:
   --judge <name>           "claude" or "none" (default: claude)
   --judge-model <id>       Override judge model (default: claude-sonnet-4-6)
   --threshold <ratio>      Pass-rate threshold 0–1
-  --filter <key=value>     Filter golden items (repeatable: category, tags).
+  --filter <key=value>     Filter golden items. Keys are independent
+                           (category, tags) — one value per key; repeating
+                           the SAME key overwrites the earlier value.
                            Tags accepts a comma-separated list — items match
                            if they have ANY of the listed tags.
                            e.g. --filter tags=smoke,core

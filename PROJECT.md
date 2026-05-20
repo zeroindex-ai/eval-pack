@@ -135,7 +135,8 @@ These were called out in the plan as needing user input; resolutions captured he
 │   ├── schema.ts          Zod schemas + types (GoldenItem, Result, ...)  │
 │   ├── checks.ts          mustMention, mustNotMention, citationCount     │
 │   ├── citations.ts       markerCitationExtractor, noopCitationExtractor │
-│   ├── metrics.ts         recall, percentile, p50, p95                   │
+│   ├── metrics.ts         recall, percentile, p50, p95 (exported utils;  │
+│   │                       p50/p95/percentile not surfaced in the report) │
 │   └── passRule.ts        default rule + helper builders                 │
 │                                                                          │
 │   src/judge-claude/      Anthropic-backed Judge implementation          │
@@ -359,7 +360,7 @@ Contents:
 - **Header** — project name, model, timestamp, total pass rate (vs threshold if provided), total items, total errored
 - **Category table** — same shape as the stdout summary, rendered as a styled HTML table
 - **Failures section** — one `<details>` per failing item: question, full answer text, retrieved refs, cited refs, every check's name + ok + detail, judge's appropriate/grounded/reason
-- **Successes section** — collapsed `<details>` listing passing items (id, category, p50 timing), available for forensics but quiet by default
+- **Successes section** — collapsed `<details>` listing passing items (id, category, per-item `totalMs` timing), available for forensics but quiet by default
 - **Footer** — source JSON path, eval-pack version, generation timestamp, link back to `zeroindex.ai`
 
 ### Design constraints
@@ -410,7 +411,9 @@ eval-pack/
 │   │   ├── schema.ts             Zod schemas + types
 │   │   ├── checks.ts             4 built-in checks
 │   │   ├── citations.ts          marker + noop extractors
-│   │   ├── metrics.ts            recall, p50, p95 (lifted from ask-zeroindex)
+│   │   ├── metrics.ts            recall, percentile, p50, p95 — exported latency
+│   │   │                          utilities; not wired into the default report
+│   │   │                          (lifted from ask-zeroindex)
 │   │   ├── metrics.test.ts       (lifted from ask-zeroindex)
 │   │   └── passRule.ts           default rule
 │   ├── judge-claude/
@@ -429,7 +432,6 @@ eval-pack/
 │   ├── action.yml                GitHub composite action manifest
 │   └── entrypoint.sh             pnpm install + eval-pack run + artifact upload
 ├── examples/
-│   ├── ask-zeroindex/            link or copy of the real consumer config
 │   └── dummy-agent/              non-RAG smoke example
 ├── package.json                  bin: { "eval-pack": "./dist/cli/bin.js" }, exports map
 ├── tsconfig.json

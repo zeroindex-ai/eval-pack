@@ -191,7 +191,8 @@ Options:
   --judge <name>           "claude" or "none" (default: claude)
   --judge-model <id>       Override judge model (default: claude-sonnet-4-6)
   --threshold <ratio>      Pass-rate threshold 0–1 (default: env EVAL_PASS_THRESHOLD or none)
-  --filter <key=value>     Filter golden items (repeatable). Keys: category, tags
+  --filter <key=value>     Filter golden items. Keys: category, tags (independent;
+                           repeating the same key overwrites the earlier value)
   --limit <n>              Max items to run
   --throttle-ms <n>        Sleep between items (default: env EVAL_THROTTLE_MS or 0)
   --results-dir <path>     Where to write run JSON (default: evals/results)

@@ -92,6 +92,12 @@ export function citationCount(opts: CitationCountOpts): Check {
 // expectRefusal — heuristic refusal detection against a configurable phrase
 // list. Passes when item.expect_refusal === (actual refusal detected).
 // Items without expect_refusal set are skipped (vacuously pass).
+//
+// CAVEAT: this is a coarse, English-only case-insensitive substring match.
+// It can false-positive on non-refusals that happen to contain a phrase
+// (e.g. "I don't know why that returns 500, but here's the fix") and will
+// miss refusals phrased differently or in other languages. Override
+// `phrases` for other locales or stricter matching.
 // ----------------------------------------------------------------------------
 
 const DEFAULT_REFUSAL_PHRASES: readonly string[] = [
