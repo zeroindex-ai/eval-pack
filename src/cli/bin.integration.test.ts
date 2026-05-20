@@ -10,7 +10,12 @@ import { fileURLToPath } from 'node:url';
 // shaped subject + golden in a tmpdir. Asserts exit code 0 (every item
 // passes because there are no checks and `--judge none` leaves judgment
 // null, so defaultPassRule passes everything) and that the per-item event
-// stream lands on stdout. Skipped gracefully when dist/ doesn't exist.
+// stream lands on stdout.
+//
+// CI runs `pnpm build` before `pnpm test` so dist/ exists and these assertions
+// actually run. When dist/ is absent (e.g. `pnpm test` locally without a
+// build) the tests report as SKIPPED via it.skipIf — visibly, rather than
+// silently passing while asserting nothing.
 // ============================================================================
 
 const REPO_ROOT = resolve(fileURLToPath(import.meta.url), '..', '..', '..');
@@ -24,6 +29,10 @@ async function distBuilt(): Promise<boolean> {
     return false;
   }
 }
+
+// Resolved once at module load (top-level await) so it.skipIf can mark the
+// suite skipped at collection time rather than no-op'ing inside the test body.
+const DIST_BUILT = await distBuilt();
 
 type SpawnResult = { code: number | null; stdout: string; stderr: string };
 
@@ -96,14 +105,7 @@ const DUMMY_GOLDEN = {
 };
 
 describe('CLI integration — dist/cli/bin.js', () => {
-  it('runs a dummy subject with --judge none and exits 0', async () => {
-    if (!(await distBuilt())) {
-      console.log(
-        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`
-      );
-      return;
-    }
-
+  it.skipIf(!DIST_BUILT)('runs a dummy subject with --judge none and exits 0', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'eval-pack-cli-'));
     try {
       const subjectPath = join(dir, 'subject.mjs');
@@ -132,14 +134,7 @@ describe('CLI integration — dist/cli/bin.js', () => {
     }
   });
 
-  it('exits 2 on usage error (unknown flag)', async () => {
-    if (!(await distBuilt())) {
-      console.log(
-        `[skip] dist/cli/bin.js not found at ${BIN_PATH}. Run \`pnpm build\` to enable the CLI integration test.`
-      );
-      return;
-    }
-
+  it.skipIf(!DIST_BUILT)('exits 2 on usage error (unknown flag)', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'eval-pack-cli-'));
     try {
       const { code, stderr } = await runCli(['run', '--not-a-real-flag', 'x'], dir);
