@@ -147,8 +147,8 @@ describe('runEval — judge integration', () => {
   });
 });
 
-describe('runEval — recall@K', () => {
-  it('computes recallAtK against relevant_refs when present', async () => {
+describe('runEval — recall', () => {
+  it('computes recall against relevant_refs when present', async () => {
     const g: GoldenSet = {
       version: '1.0',
       items: [
@@ -165,12 +165,12 @@ describe('runEval — recall@K', () => {
       retrievedRefs: ['a', 'b', 'x'],
     });
     const report = await runEval({ golden: g, subject });
-    expect(report.results[0]!.recallAtK).toBeCloseTo(2 / 3);
+    expect(report.results[0]!.recall).toBeCloseTo(2 / 3);
   });
 
-  it('recallAtK is null when relevant_refs absent', async () => {
+  it('recall is null when relevant_refs absent', async () => {
     const report = await runEval({ golden, subject: happySubject });
-    for (const r of report.results) expect(r.recallAtK).toBeNull();
+    for (const r of report.results) expect(r.recall).toBeNull();
   });
 });
 

@@ -13,7 +13,7 @@ import {
 } from './schema.js';
 import { noopCitationExtractor } from './citations.js';
 import { defaultPassRule, type PassRule } from './passRule.js';
-import { recallAtK } from './metrics.js';
+import { recall } from './metrics.js';
 
 // ============================================================================
 // runEval — the orchestration loop
@@ -109,8 +109,8 @@ async function runOne(
 
   const retrievedRefs = ans.retrievedRefs ?? [];
   const citationRefs = citationExtractor(ans.text);
-  const recall =
-    item.relevant_refs && item.relevant_refs.length > 0 ? recallAtK(retrievedRefs, item.relevant_refs) : null;
+  const recallValue =
+    item.relevant_refs && item.relevant_refs.length > 0 ? recall(retrievedRefs, item.relevant_refs) : null;
 
   const partial: PartialResult = {
     id: item.id,
@@ -119,7 +119,7 @@ async function runOne(
     text: ans.text,
     retrievedRefs,
     citationRefs,
-    recallAtK: recall,
+    recall: recallValue,
     timings: { totalMs },
     metadata: ans.metadata ?? {},
   };

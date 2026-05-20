@@ -1,6 +1,6 @@
 // Barrel for @zeroindex-ai/eval-pack core.
 
-export { recallAtK, percentile, p50, p95 } from './metrics.js';
+export { recall, percentile, p50, p95 } from './metrics.js';
 
 export {
   GoldenItemSchema,

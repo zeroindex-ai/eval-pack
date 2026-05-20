@@ -1,28 +1,28 @@
 import { describe, it, expect } from 'vitest';
-import { recallAtK, percentile, p50, p95 } from './metrics.js';
+import { recall, percentile, p50, p95 } from './metrics.js';
 
-describe('recallAtK', () => {
+describe('recall', () => {
   it('returns 1 when the relevant set is empty (vacuously satisfied)', () => {
-    expect(recallAtK([], [])).toBe(1);
-    expect(recallAtK([1, 2], [])).toBe(1);
+    expect(recall([], [])).toBe(1);
+    expect(recall([1, 2], [])).toBe(1);
   });
 
   it('returns 1 when all relevant ids are retrieved', () => {
-    expect(recallAtK([1, 2, 3], [1, 2])).toBe(1);
-    expect(recallAtK([3, 1, 2], [1, 2, 3])).toBe(1);
+    expect(recall([1, 2, 3], [1, 2])).toBe(1);
+    expect(recall([3, 1, 2], [1, 2, 3])).toBe(1);
   });
 
   it('returns the correct fraction when some are retrieved', () => {
-    expect(recallAtK([1, 4], [1, 2, 3])).toBeCloseTo(1 / 3);
-    expect(recallAtK([1, 2, 4, 5], [1, 2, 3])).toBeCloseTo(2 / 3);
+    expect(recall([1, 4], [1, 2, 3])).toBeCloseTo(1 / 3);
+    expect(recall([1, 2, 4, 5], [1, 2, 3])).toBeCloseTo(2 / 3);
   });
 
   it('returns 0 when no relevant ids are retrieved', () => {
-    expect(recallAtK([4, 5, 6], [1, 2, 3])).toBe(0);
+    expect(recall([4, 5, 6], [1, 2, 3])).toBe(0);
   });
 
   it('ignores irrelevant retrieved ids', () => {
-    expect(recallAtK([1, 2, 99], [1, 2])).toBe(1);
+    expect(recall([1, 2, 99], [1, 2])).toBe(1);
   });
 });
 

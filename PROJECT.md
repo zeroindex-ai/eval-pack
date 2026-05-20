@@ -135,7 +135,7 @@ These were called out in the plan as needing user input; resolutions captured he
 │   ├── schema.ts          Zod schemas + types (GoldenItem, Result, ...)  │
 │   ├── checks.ts          mustMention, mustNotMention, citationCount     │
 │   ├── citations.ts       markerCitationExtractor, noopCitationExtractor │
-│   ├── metrics.ts         recallAtK, percentile, p50, p95                │
+│   ├── metrics.ts         recall, percentile, p50, p95                   │
 │   └── passRule.ts        default rule + helper builders                 │
 │                                                                          │
 │   src/judge-claude/      Anthropic-backed Judge implementation          │
@@ -249,7 +249,7 @@ export type Result = {
   text: string;
   retrievedRefs: string[];
   citationRefs: string[];
-  recallAtK: number | null; // null if relevant_refs absent
+  recall: number | null; // set-recall over full retrieved set; null if relevant_refs absent
   checks: CheckResult[];
   judgment: Judgment | null; // null if no judge configured
   pass: boolean;
@@ -410,7 +410,7 @@ eval-pack/
 │   │   ├── schema.ts             Zod schemas + types
 │   │   ├── checks.ts             4 built-in checks
 │   │   ├── citations.ts          marker + noop extractors
-│   │   ├── metrics.ts            recallAtK, p50, p95 (lifted from ask-zeroindex)
+│   │   ├── metrics.ts            recall, p50, p95 (lifted from ask-zeroindex)
 │   │   ├── metrics.test.ts       (lifted from ask-zeroindex)
 │   │   └── passRule.ts           default rule
 │   ├── judge-claude/

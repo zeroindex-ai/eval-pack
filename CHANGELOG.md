@@ -9,6 +9,17 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING:** The `Result`/`PartialResult` field `recallAtK` is renamed to
+  `recall`, and the exported metric function `recallAtK` is renamed to
+  `recall`. The metric was never top-K: it computes set-recall
+  (`|relevant ∩ retrieved| / |relevant|`) over the entire retrieved set with
+  no `K` parameter and no truncation. The name now reflects that. The HTML
+  report label changes from "Recall@K" to "Recall". Consumers reading
+  `result.recallAtK` or importing the `recallAtK` function must update to
+  `recall`.
+
 ## [0.2.0] - 2026-05-16
 
 ### Changed

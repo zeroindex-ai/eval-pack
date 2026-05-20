@@ -49,7 +49,7 @@ const result: PartialResult = {
   text: 'Audit and build.',
   retrievedRefs: [],
   citationRefs: ['1'],
-  recallAtK: null,
+  recall: null,
   timings: { totalMs: 100 },
   metadata: {},
 };
