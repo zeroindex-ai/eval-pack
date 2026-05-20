@@ -10,7 +10,7 @@ function makeResult(overrides: Partial<PartialResult> = {}): PartialResult {
     text: '',
     retrievedRefs: [],
     citationRefs: [],
-    recallAtK: null,
+    recall: null,
     timings: { totalMs: 0 },
     metadata: {},
     ...overrides,

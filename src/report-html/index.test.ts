@@ -11,7 +11,7 @@ function makeResult(overrides: Partial<Result> = {}): Result {
     text: 'Answer.',
     retrievedRefs: [],
     citationRefs: [],
-    recallAtK: null,
+    recall: null,
     timings: { totalMs: 100 },
     metadata: {},
     checks: [],

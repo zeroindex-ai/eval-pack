@@ -70,7 +70,7 @@ export type PartialResult = {
   text: string;
   retrievedRefs: string[];
   citationRefs: string[];
-  recallAtK: number | null;
+  recall: number | null;
   timings: {
     retrievalMs?: number;
     firstTokenMs?: number;

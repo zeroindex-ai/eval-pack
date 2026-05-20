@@ -1,7 +1,12 @@
-// Eval metrics: recall@K for retrieval ablation and percentile (p50/p95)
+// Eval metrics: set-recall for retrieval ablation and percentile (p50/p95)
 // for latency aggregation. Pure functions, no dependencies.
 
-export function recallAtK<T>(retrieved: readonly T[], relevant: readonly T[]): number {
+/**
+ * Set-recall over the entire retrieved set: |relevant ∩ retrieved| / |relevant|.
+ * There is no K — the full `retrieved` array is considered, with no truncation.
+ * Returns 1 when there are no relevant items (nothing to miss).
+ */
+export function recall<T>(retrieved: readonly T[], relevant: readonly T[]): number {
   if (relevant.length === 0) return 1;
   const set = new Set<T>(retrieved);
   return relevant.filter((id) => set.has(id)).length / relevant.length;

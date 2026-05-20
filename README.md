@@ -192,7 +192,7 @@ const html = renderHtml(report, {
 writeFileSync('eval-report.html', html);
 ```
 
-The report shows: headline pass-rate (vs threshold if provided), per-category table, expanded failure cards (question, retrieved refs, cited refs, recall@K, all checks, judge appropriate/grounded/reason, full answer text), a collapsed pass list, and an errors table when items threw.
+The report shows: headline pass-rate (vs threshold if provided), per-category table, expanded failure cards (question, retrieved refs, cited refs, recall, all checks, judge appropriate/grounded/reason, full answer text), a collapsed pass list, and an errors table when items threw.
 
 ## Develop
 

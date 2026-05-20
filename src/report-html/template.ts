@@ -49,8 +49,8 @@ function renderResultBody(r: Result): string {
     : '<div class="field"><span class="field-label">Judge:</span> <span class="tag muted">none</span></div>';
 
   const recall =
-    r.recallAtK !== null
-      ? `<div class="field"><span class="field-label">Recall@K:</span> <code>${(r.recallAtK * 100).toFixed(1)}%</code></div>`
+    r.recall !== null
+      ? `<div class="field"><span class="field-label">Recall:</span> <code>${(r.recall * 100).toFixed(1)}%</code></div>`
       : '';
 
   const retrieved =
