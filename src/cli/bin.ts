@@ -2,7 +2,8 @@
 import { writeFile } from 'node:fs/promises';
 import { isAbsolute, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { runEval, type RunFilter } from '../core/runner.js';
+import { runEval } from '../core/runner.js';
+import { buildFilter } from './buildFilter.js';
 import { renderHtml } from '../report-html/index.js';
 import type { Judge, Subject } from '../core/schema.js';
 import { HELP, UsageError, parseArgs, resolveThreshold, resolveThrottleMs } from './parseArgs.js';
@@ -20,14 +21,6 @@ async function loadSubject(path: string): Promise<Subject> {
     );
   }
   return subject as Subject;
-}
-
-function buildFilter(filter: Record<string, string>, limit: number | undefined): RunFilter {
-  const out: RunFilter = {};
-  if (filter['category'] !== undefined) out.category = filter['category'];
-  if (filter['tags'] !== undefined) out.tags = filter['tags'].split(',');
-  if (limit !== undefined) out.limit = limit;
-  return out;
 }
 
 async function main(): Promise<void> {
