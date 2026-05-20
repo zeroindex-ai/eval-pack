@@ -28,5 +28,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm lint
-      - run: pnpm test
+      # Build before test so the CLI integration test (which spawns
+      # dist/cli/bin.js) actually runs its assertions instead of skipping.
       - run: pnpm build
+      - run: pnpm test
