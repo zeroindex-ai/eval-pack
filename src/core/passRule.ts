@@ -11,10 +11,12 @@ export type PassRule = (result: Result) => boolean;
 
 /**
  * Default pass rule: every check ok + (no judge configured, OR judge says
- * appropriate=yes and grounded ∈ {yes, na}).
+ * appropriate=yes and grounded is anything other than `no`).
  *
- * The `na` grounded value covers refusal items where citations aren't
- * expected — a clean refusal is a valid grounded answer.
+ * `grounded` is evaluated as a blacklist — only the explicit `no` value
+ * fails. This lets the `na` value (refusal items where citations aren't
+ * expected — a clean refusal is a valid grounded answer) pass, along with
+ * any future grounded value that isn't an outright failure.
  */
 export const defaultPassRule: PassRule = (result) => {
   if (!result.checks.every((c) => c.ok)) return false;

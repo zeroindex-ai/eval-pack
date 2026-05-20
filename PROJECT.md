@@ -422,12 +422,9 @@ eval-pack/
 │   │   ├── template.ts           the HTML scaffold
 │   │   └── styles.ts             inlined CSS as a string
 │   └── cli/
-│       ├── bin.ts                #!/usr/bin/env node — entry
-│       ├── parseArgs.ts          tiny --flag parser
-│       └── printers/
-│           ├── stdout.ts
-│           ├── json.ts
-│           └── html.ts           thin wrapper around report-html
+│       ├── bin.ts                #!/usr/bin/env node — entry (JSON + HTML output inline)
+│       ├── parseArgs.ts          tiny --flag parser + HELP text
+│       └── stdoutPrinter.ts      printSummary() — the stdout printer
 ├── action/
 │   ├── action.yml                GitHub composite action manifest
 │   └── entrypoint.sh             pnpm install + eval-pack run + artifact upload

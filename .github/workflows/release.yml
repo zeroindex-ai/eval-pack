@@ -53,9 +53,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          # Build the CHANGELOG anchor the way GitHub renders it. Headings look
+          # like "## [0.2.0] - 2026-05-16"; GitHub's slug for that is
+          # "020---2026-05-16" (dots dropped, " - " → "---"). Derive the date
+          # from the heading itself rather than the publish day, since they can
+          # differ. If the heading (or its date) can't be parsed, fall back to
+          # the bare version anchor "#020", which still resolves to the section.
+          VERSION_NODOTS="$(printf '%s' "$VERSION" | tr -d '.')"
+          HEADING_DATE="$(grep -oE "^## \[$VERSION\] - [0-9]{4}-[0-9]{2}-[0-9]{2}" CHANGELOG.md \
+            | head -n1 | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' || true)"
+          if [ -n "$HEADING_DATE" ]; then
+            ANCHOR="${VERSION_NODOTS}---${HEADING_DATE}"
+          else
+            ANCHOR="${VERSION_NODOTS}"
+          fi
           gh release create "$GITHUB_REF_NAME" \
             --title "$GITHUB_REF_NAME" \
-            --notes "See [CHANGELOG.md](./CHANGELOG.md#$(echo "${GITHUB_REF_NAME#v}" | tr '.' '')---$(date -u +%Y-%m-%d)) for details."
+            --notes "See [CHANGELOG.md](./CHANGELOG.md#${ANCHOR}) for details."
 
 # Required GitHub Actions secret: NPM_TOKEN (an "Automation" token from npmjs.org with publish scope).
 # Set via: gh secret set NPM_TOKEN --body '...' or via the repo Settings → Secrets and variables → Actions UI.

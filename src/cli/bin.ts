@@ -15,7 +15,8 @@ async function loadSubject(path: string): Promise<Subject> {
   if (typeof subject !== 'function') {
     throw new Error(
       `Subject file ${path} must export a 'subject' function or default. ` +
-        `For TypeScript subjects, invoke via 'tsx eval-pack run ...' or pre-compile to JS.`
+        `For TypeScript subjects, run the CLI under tsx ` +
+        `('tsx node_modules/.bin/eval-pack run ...') or pre-compile to JS.`
     );
   }
   return subject as Subject;
