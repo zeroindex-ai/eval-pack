@@ -9,6 +9,8 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-05-20
+
 ### Changed
 
 - **BREAKING:** The `Result`/`PartialResult` field `recallAtK` is renamed to
@@ -19,6 +21,35 @@ This file closes the release-runbook step at [PROJECT.md §10](./PROJECT.md) ("U
   report label changes from "Recall@K" to "Recall". Consumers reading
   `result.recallAtK` or importing the `recallAtK` function must update to
   `recall`.
+- Enabled `verbatimModuleSyntax` and `noFallthroughCasesInSwitch` in
+  `tsconfig.json` (no source change — the code was already `import type`-clean).
+- The self-contained HTML report footer now includes the
+  `@zeroindex-ai/eval-pack` version, read from the package's own
+  `package.json` with an `'unknown'` fallback. The version read is lazy (on
+  first `renderHtml` call), so importing `./report-html` is side-effect-free.
+
+### Added
+
+- `prepublishOnly: "pnpm build && pnpm test"` so the documented manual-publish
+  fallback can't ship a stale or untested `dist/`.
+- The CLI now warns on `stderr` when `--filter` is passed an unrecognized key
+  (e.g. a typo), naming the unknown key(s) and the known ones, instead of
+  silently running the full set.
+
+### Fixed
+
+- Corrected the runnable CLI invocation in the README and HELP text to
+  `tsx node_modules/.bin/eval-pack run ...` (the bin shebang is `node`); the
+  prior `tsx eval-pack run` form was not literally runnable.
+- `release.yml` now derives the GitHub Release CHANGELOG anchor from the
+  changelog heading (with a bare-version fallback) so the "See CHANGELOG" link
+  resolves.
+- Documentation/`--filter` accuracy: `--filter` is documented as one-per-key
+  (repeated same-key filters overwrite, they do not accumulate); the
+  `defaultPassRule` JSDoc now describes the actual blacklist logic; `p50`/`p95`/
+  `percentile` are documented as exported utilities not surfaced in the default
+  report; `expectRefusal` carries a coarse-English-heuristic caveat; removed a
+  ghost `examples/ask-zeroindex/` entry from the layout diagram.
 
 ## [0.2.0] - 2026-05-16
 
