@@ -1,6 +1,6 @@
 {
   "name": "@zeroindex-ai/eval-pack",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Opinionated open-source eval harness for RAG and agent apps built on Claude",
   "type": "module",
   "main": "dist/core/index.js",
