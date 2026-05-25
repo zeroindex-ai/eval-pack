@@ -262,9 +262,9 @@ export type Result = {
 ### Runner entrypoint
 
 ```ts
-import { runEval, claudeJudge } from '@zeroindex-ai/eval-pack';
+import { runEval, markerCitationExtractor } from '@zeroindex-ai/eval-pack';
 import { mustMention, mustNotMention, citationCount } from '@zeroindex-ai/eval-pack/checks';
-import { markerCitationExtractor } from '@zeroindex-ai/eval-pack';
+import { claudeJudge } from '@zeroindex-ai/eval-pack/judge-claude';
 
 const subject: Subject = async (question) => {
   const chunks = await hybridSearch(question);
