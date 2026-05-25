@@ -17,6 +17,10 @@ eval-pack is the generalization of the LLM-as-judge + programmatic-checks pipeli
 
 What it deliberately is not: a heavyweight platform. No service to host, no proprietary file format, no SaaS subscription. One package, subpath exports, a small CLI, and a companion GitHub composite action.
 
+## Positioning
+
+eval-pack is a small, file-producing library you run inside your own CI — not a hosted eval platform or observability product. It writes a self-contained HTML report you commit or upload as a build artifact; there is no dashboard, no run database, and no telemetry leaving your pipeline. If you need cross-run trend tracking, a team UI, trace storage, or production monitoring, reach for a dedicated platform (e.g. Braintrust, Langfuse) — eval-pack is for keeping a golden-set check honest and gated in the same place your tests already run.
+
 ## Install
 
 ```bash
