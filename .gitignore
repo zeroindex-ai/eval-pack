@@ -2,6 +2,9 @@ node_modules/
 dist/
 *.tsbuildinfo
 coverage/
+# pnpm pack output (the tarball-contents test cleans up after itself; this
+# guards a failed/interrupted run from leaving one staged).
+*.tgz
 .DS_Store
 .env*
 !.env.example
