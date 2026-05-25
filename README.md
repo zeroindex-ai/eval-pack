@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/@zeroindex-ai/eval-pack.svg)](https://www.npmjs.com/package/@zeroindex-ai/eval-pack)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Status: v0.2.0.** API may change with feedback. See [PROJECT.md](./PROJECT.md) for design, decisions, and the ordered work list.
+> **Status: v0.3.0.** API may change with feedback. See [PROJECT.md](./PROJECT.md) for design, decisions, and the ordered work list, and [CHANGELOG.md](./CHANGELOG.md) for the release history (0.3.0 renamed `recallAtK` → `recall`).
 
 ## What this is
 
