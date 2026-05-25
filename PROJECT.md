@@ -568,7 +568,7 @@ authenticated npm session.
 
 - **Source of the lift-and-shift code:** [`zeroindex-ai/ask-zeroindex/evals/`](https://github.com/zeroindex-ai/ask-zeroindex/tree/main/evals)
 - **Source of the methodology writeup:** [`zeroindex-ai/ask-zeroindex/eval-baselines.md`](https://github.com/zeroindex-ai/ask-zeroindex/blob/main/eval-baselines.md)
-- **Website repo:** [`zeroindex-ai/zeroindexai`](https://github.com/zeroindex-ai/zeroindexai)
+- **Website:** [zeroindex.ai](https://zeroindex.ai) — Astro site (source in the private `zeroindex-site` repo)
 - **This repo (planned):** [`zeroindex-ai/eval-pack`](https://github.com/zeroindex-ai/eval-pack)
 - **Live site:** `evals.zeroindex.ai` (planned)
 
