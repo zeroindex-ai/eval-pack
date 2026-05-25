@@ -19,7 +19,7 @@ An opinionated open-source eval harness for RAG and agent applications built on 
 The package gives an AI-application author three things they'd otherwise build themselves:
 
 1. A **golden-set runner** with throttle handling, error isolation per item, and threshold gating
-2. A **judge** abstraction (Claude-backed in v0.1) and a small set of **built-in programmatic checks** (`mustMention`, `mustNotMention`, `citationCount`, `expectRefusal`)
+2. A **judge** abstraction (Claude-backed) and a small set of **built-in programmatic checks** (`mustMention`, `mustNotMention`, `citationCount`, `expectRefusal`)
 3. A **standalone HTML report renderer** that produces one self-contained file per run — suitable for CI artifacts, browser-local viewing, or iframe embedding
 
 ### Why this project
@@ -40,14 +40,14 @@ The eval methodology that powers `ask-zeroindex` (LLM-as-judge + programmatic ch
 | Reusable GitHub composite action                                | Consumer workflow drops from ~35 lines to ~10                                          | ✅     |
 | Published to npm                                                | `@zeroindex-ai/eval-pack` v0.1.0 public on npmjs.com                                   | ✅     |
 
-### Out of scope (for v0.1)
+### Out of scope (current)
 
 - OpenAI / Gemini judges. Single-provider keeps the contract honest until a second provider exercises the adapter point.
-- Agent-specific primitives (tool-call assertions, trajectory grading, ReAct trace inspection). Land in v0.2 once `repo-xray` exposes the shape.
+- Agent-specific primitives (tool-call assertions, trajectory grading, ReAct trace inspection). Land in a later release once `repo-xray` exposes the shape.
 - Live web dashboard or queryable run history. A separate dashboard tool can ingest the JSON output; `eval-pack` stays a file-producing library.
-- Dataset versioning, run-over-run diffing, regression detection. v0.2.
+- Dataset versioning, run-over-run diffing, regression detection.
 - Streaming first-token latency in the core API. Subject returns final text; if a user wants streaming latency captured, they put it in `result.metadata` from inside their subject.
-- Redaction layer for the HTML report. Optional hook stub in v0.1; full implementation when a consumer needs it.
+- Redaction layer for the HTML report. Optional hook stub ships; full implementation when a consumer needs it.
 - Telemetry / phone-home / usage analytics. Never.
 
 ---
@@ -288,7 +288,7 @@ const results = await runEval({
 });
 ```
 
-### Built-in checks (v0.1)
+### Built-in checks
 
 | Check                               | Reads from item              | Logic                                                                               |
 | ----------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------- |
@@ -370,7 +370,7 @@ Contents:
 - Survives long-term archival (no font CDNs, no analytics)
 - One file = one run; no multi-run dashboards (that belongs in a separate dashboard tool, not in this library)
 
-The optional `redact?: (item, result) => Result` hook lets a future consumer strip sensitive content before rendering. Stubbed in v0.1.
+The optional `redact?: (item, result) => Result` hook lets a future consumer strip sensitive content before rendering. Stubbed — no consumer needs it yet.
 
 ---
 
@@ -539,11 +539,11 @@ authenticated npm session.
 
 ## 12. Known constraints & future work
 
-### v0.1 known constraints
+### Current known constraints
 
-- **Single LLM provider for judging.** Claude only. Adapter contract exists in `core/schema.ts` so v0.2 is additive.
-- **No regression detection.** A passing run replaces the previous one in `evals.zeroindex.ai`. v0.2 introduces run history.
-- **Subject file is dynamically imported via `tsx`.** Adds a runtime dep on `tsx` for the CLI. Acceptable for v0.1; reconsider if any consumer ships JS-only.
+- **Single LLM provider for judging.** Claude only. Adapter contract exists in `core/schema.ts` so a second provider is additive.
+- **No regression detection.** A passing run replaces the previous one in `evals.zeroindex.ai`. Run history is future work.
+- **Subject file is dynamically imported via `tsx`.** Adds a runtime dep on `tsx` for the CLI. Acceptable for now; reconsider if any consumer ships JS-only.
 - **Throttling is global per run.** No per-resource (Voyage / Anthropic / custom) throttle policy. The single knob covers `ask-zeroindex`'s Voyage free-tier case; richer policies wait for a real second use case.
 
 ### v0.2 candidate work
