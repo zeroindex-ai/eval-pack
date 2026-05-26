@@ -106,7 +106,7 @@ These were called out in the plan as needing user input; resolutions captured he
 | ------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Single package vs 5-package monorepo | **Single package with subpath exports**                              | The 5-package split is artificial for this product (see "Things deliberately NOT chosen"). Subpath exports give the same import clarity.                                                                               |
 | `evals.zeroindex.ai` infra           | **Cloudflare Workers Static Assets**, same pattern as `zeroindex.ai` | New public repo `zeroindex-ai/evals-site` with auto-deploy. CI commits the HTML artifact; the static site serves it. Zero new infra to learn. R2 + signed URLs is the right answer at 10× scale and is not needed yet. |
-| Full answer text in HTML report?     | **Yes, full**                                                        | v0.1's only public consumer (`ask-zeroindex`) answers questions about ZeroIndex itself — nothing sensitive. Optional `redact?: (item, result) => Result` hook on the renderer keeps the door open; ship empty.         |
+| Full answer text in HTML report?     | **Yes, full**                                                        | v0.1's only public consumer (`ask-zeroindex`) answers questions about ZeroIndex itself — nothing sensitive. Optional `redact?: (result: Result) => Result` hook on the renderer keeps the door open; ship empty.         |
 | Schema migration in `ask-zeroindex`  | **Hand-edit `golden-seed.json`**                                     | 30 items, ~5 minutes, eyeballs every entry once. Codemod is busywork at this scale.                                                                                                                                    |
 | License                              | **MIT**                                                              | Matches `mcp-pack`. No bifurcation without reason.                                                                                                                                                                     |
 
@@ -370,7 +370,7 @@ Contents:
 - Survives long-term archival (no font CDNs, no analytics)
 - One file = one run; no multi-run dashboards (that belongs in a separate dashboard tool, not in this library)
 
-The optional `redact?: (item, result) => Result` hook lets a future consumer strip sensitive content before rendering. Stubbed — no consumer needs it yet.
+The optional `redact?: (result: Result) => Result` hook lets a future consumer strip sensitive content before rendering. Stubbed — no consumer needs it yet.
 
 ---
 
