@@ -1,5 +1,7 @@
 # eval-pack — Project Documentation
 
+> **Phase:** Published
+>
 > **Status: shipped** — `@zeroindex-ai/eval-pack` v0.3.0 on npm. Core + Claude judge + HTML report + CLI + composite GitHub action, dogfooded end-to-end by `ask-zeroindex`. See [CHANGELOG.md](./CHANGELOG.md) for the release history.
 
 This document captures the scope, strategic decisions, architecture, public API contracts, distribution shape, and ordered work list for `eval-pack`. It exists to:
