@@ -447,7 +447,26 @@ eval-pack/
 
 ---
 
-## 9. Ordered work list
+## 9. Testing & evaluation strategy
+
+The package ships with three test tiers, all under `vitest` (`vitest.config.ts` globs `src/**/*.test.ts`). There are **no live-network tests** — the Claude judge is exercised against a fake `Anthropic` client, never a real API key — so the suite runs offline, deterministically, and for free in CI.
+
+| Tier | What it covers | Examples | Mechanism |
+| --- | --- | --- | --- |
+| **Unit** | Pure functions over fabricated `Result`/`GoldenItem` shapes; no I/O. | `checks`, `citations`, `metrics`, `passRule`, `schema` (Zod parse), `cli/parseArgs`, `cli/buildFilter`, `cli/stdoutPrinter`, `judge-claude/prompt`, `judge-claude/parse` | Direct calls + `expect`. |
+| **Judge (mocked LLM)** | `claudeJudge()` end-to-end without a network call. | `judge-claude/index.test.ts` | `vi.fn` fake whose `messages.create` returns canned text, cast to `Anthropic`. |
+| **Report (structural)** | `renderHtml()` output is a complete, self-contained document. | `report-html/index.test.ts` | String/regex assertions (`toMatch`/`toContain`) on the HTML — **not** `toMatchSnapshot`, so there's no snapshot file to drift; the invariants (DOCTYPE, inlined `<style>`, no external stylesheet link, title/header from `projectName`) are asserted explicitly. |
+| **Integration (spawns built CLI)** | The real `dist/cli/bin.js` against a dummy-agent-shaped subject + golden in a tmpdir. | `cli/bin.integration.test.ts`, `pack-contents.test.ts` | `spawn` the node binary; assert exit code, stdout event stream, and (for `pack-contents`) that `pnpm pack --json`'s file list matches the `files` whitelist. |
+
+**Build-before-test contract.** The two integration tests need `dist/` on disk. They guard with `it.skipIf(!DIST_BUILT)` (resolved at module load via top-level `await`), so without a build they report **SKIPPED** — visibly — rather than silently passing while asserting nothing. CI therefore runs `pnpm build` **before** `pnpm test` so these assertions actually execute. `pack-contents` is the regression guard against shipping a stray file (`src/`, `*.tsbuildinfo`, `.env*`) or a missing/empty `dist/`.
+
+**CI matrix.** `.github/workflows/ci.yml` runs `typecheck → lint → build → test` on Node **20, 22, 24** (matrix), on every push to `main` and every PR, with `cancel-in-progress` concurrency. `>=20` is the declared `engines` floor; 24 is the dev rotation's LTS.
+
+**Coverage expectations.** No enforced coverage threshold — the bar is *behavioral*, not line-percentage: every exported entrypoint (`.`, `./checks`, `./judge-claude`, `./report-html`), every built-in check, every CLI flag/exit-code, and the publish-tarball shape have a dedicated test. The dogfood consumer (`ask-zeroindex`) is the real end-to-end signal: its 30-query golden run reproduces the documented ~90% baseline (97% on the latest scheduled run), which is the package's strongest "it actually works" evidence beyond the unit suite.
+
+---
+
+## 10. Ordered work list
 
 **Status as of 2026-05-14:** v0.1 work-list complete. All 17 items shipped — v0.1.0 and v0.1.1 published to npm; `ask-zeroindex` dogfoods the package end-to-end (90% pass-rate baseline, 97% on the latest scheduled run); `evals.zeroindex.ai` live serving HTML reports.
 
@@ -471,7 +490,7 @@ eval-pack/
 
 ---
 
-## 10. Operational runbook
+## 11. Operational runbook
 
 ### Local development
 
@@ -524,7 +543,7 @@ authenticated npm session.
 
 ---
 
-## 11. Decision log (running)
+## 12. Decision log (running)
 
 | Date       | Decision                                                  | Why                                                                                                                               |
 | ---------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
@@ -539,7 +558,7 @@ authenticated npm session.
 
 ---
 
-## 12. Known constraints & future work
+## 13. Known constraints & future work
 
 ### Current known constraints
 
@@ -566,13 +585,15 @@ authenticated npm session.
 
 ---
 
-## 13. Cross-references
+## 14. Cross-references
 
+- **This repo:** [`zeroindex-ai/eval-pack`](https://github.com/zeroindex-ai/eval-pack) — published as `@zeroindex-ai/eval-pack` on npm.
+- **Live reports site:** [`evals.zeroindex.ai`](https://evals.zeroindex.ai) — live, serving the dogfood HTML reports (`zeroindex-ai/evals-site`).
+- **Non-RAG usage example:** [`examples/dummy-agent/README.md`](./examples/dummy-agent/README.md) — the smallest working consumer (static-lookup subject, no judge, no API keys); the second-consumer proof that the contract isn't RAG-shaped.
 - **Source of the lift-and-shift code:** [`zeroindex-ai/ask-zeroindex/evals/`](https://github.com/zeroindex-ai/ask-zeroindex/tree/main/evals)
 - **Source of the methodology writeup:** [`zeroindex-ai/ask-zeroindex/eval-baselines.md`](https://github.com/zeroindex-ai/ask-zeroindex/blob/main/eval-baselines.md)
-- **Website:** [zeroindex.ai](https://zeroindex.ai) — Astro site (source in the private `zeroindex-site` repo)
-- **This repo (planned):** [`zeroindex-ai/eval-pack`](https://github.com/zeroindex-ai/eval-pack)
-- **Live site:** `evals.zeroindex.ai` (planned)
+- **Website:** [zeroindex.ai](https://zeroindex.ai) — Astro site (source in the private `zeroindex-site` repo).
+- **Companion docs:** [CHANGELOG.md](./CHANGELOG.md) (per-release *what*) · [README.md](./README.md) (public pitch + install) · [AGENTS.md](./AGENTS.md) (agent operating manual).
 
 ---
 
